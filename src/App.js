@@ -51,7 +51,7 @@ import './App.scss';
 
     setReadout(readout) {
         let rd = readout.toString();
-        if (rd.indexOf('e') > -1) {
+        if (rd.indexOf('e') > -1 || isNaN(rd) || readout === Infinity) {
             return rd;
         }
         let minus = rd.substring(0,1) === '-' && readout ? '-' : '';
