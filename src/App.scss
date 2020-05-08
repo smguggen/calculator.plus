@@ -11,6 +11,7 @@ html {
     display:flex;
     justify-content:center;
     padding:50px 30px;
+    min-width:450px;
   }
   
   .container {
@@ -107,5 +108,8 @@ html {
   @media screen and (orientation:portrait) {
       .container {
           width: 98%;
+      }
+      .bottom {
+        grid-template-columns: repeat(auto-fill, 65px);
       }
   }
