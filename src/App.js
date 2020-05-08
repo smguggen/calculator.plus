@@ -50,6 +50,9 @@ import './App.scss';
         if (res.indexOf('.') < 0) {
           res += '.';
         }
+        if (!res || res === '.') {
+            res = '0.';
+        }
         return res;
     }
     

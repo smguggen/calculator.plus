@@ -15,9 +15,9 @@ export default class CalcHelper extends Component {
             Equals: '=',
             Decimal: '.'
         };
-        this.alts = ['%'];
+        this.alts = [this.squareRoot];
         
-        this.order = ['AC', 'C', this.squareRoot, '+', 7, 8, 9, '-',
+        this.order = ['AC', 'C', '%', '+', 7, 8, 9, '-',
         4, 5, 6, 'x', 1, 2, 3, '/', '+/-',
         0, '.', '='];
         this.operators = ['+', '-', '/', 'x'];
