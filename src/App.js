@@ -51,6 +51,9 @@ import './App.scss';
 
     setReadout(readout) {
         let rd = readout.toString();
+        if (rd.indexOf('e') > -1) {
+            return rd;
+        }
         let minus = rd.substring(0,1) === '-' && readout ? '-' : '';
         rd = rd.replace(/[^0-9\.]/g, '');
         if (/^0+[^\.]/.test(rd)) {
@@ -65,7 +68,8 @@ import './App.scss';
         if (res.substring(0,1) === '.') {
             res = '0' + res;
         }
-        if (res.length > 12) {
+        let limit = document.getElementById('screen').offsetWidth > 400 ? 12 : 8;
+        if (res.length > limit) {
             res = Number(res).toExponential();
         }
         if (!res) {
