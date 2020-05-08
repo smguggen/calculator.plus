@@ -235,7 +235,6 @@ import './App.scss';
         document.getElementById('screen').focus();
         let $this = this;
         document.addEventListener('keyup', e => {
-            console.log(e.key);
             $this.handlePress(e);
         });
     }
