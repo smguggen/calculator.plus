@@ -1,4 +1,11 @@
 $states: "&:hover, &:active, &:visited, &:focus, &.focus, &.active";
+@mixin noOutline {
+    #{$states} {
+        outline-style:solid !important;
+        outline-width:0 !important;
+        outline-color:transparent !important;
+    }
+}
 
 html {
     display:flex;
@@ -12,8 +19,8 @@ html {
     padding:30px;
     background-color:#dedede;
     border-radius:10%;
-    width:450px;
-    height:620px;
+    width:500px;
+    height:650px;
     position:relative;
   }
   
@@ -26,7 +33,7 @@ html {
   
   .bottom {
      display: grid;
-     grid-template-columns: repeat(auto-fill, 75px);
+     grid-template-columns: repeat(auto-fill, 85px);
      grid-gap: 20px;
      justify-content: center;
      height:400px;
@@ -36,8 +43,8 @@ html {
     text-align:right;
     overflow:hidden;
     padding:0 5px;
-    height: 50px;
-    line-height:47px;
+    height: 60px;
+    line-height:57px;
     margin: 10px 45px 25px;
     background-color:#fff;
     border: 2px solid #cdcdcd;
@@ -45,6 +52,7 @@ html {
     resize:none;
     color:#000;
     font-size:32px;
+    @include noOutline;
   }
   
   button {
@@ -82,10 +90,8 @@ html {
             top:-1px;
         }
       }
+      @include noOutline;
       #{$states} {
-        outline-style:solid !important;
-        outline-width:0 !important;
-        outline-color:transparent !important;
         box-shadow:1px 1px 1px 1px rgba(0,0,0,0.5) !important;
       }
       &.active {

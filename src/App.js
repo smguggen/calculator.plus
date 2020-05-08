@@ -19,19 +19,30 @@ import './App.scss';
     }
     
     handleClick(e) {
-        let digit = e.target.innerText;
-        if (this.operators.includes(digit)) {
-          this.handleOperators(digit);
-        } else if (this.resolvers.includes(digit)) {
-          this.handleResolvers(digit);
-        } else if (this.resetters.includes(digit)) {
-            this.handleResetters(digit);
-        } else if (digit === '.') {  
-              this.handleDecimal();
-        } else {
-            this.handleDigits(digit);
+        this.triggerClick(e.target.innerText);
+    }
+    
+    handlePress(e) {
+        let digit = this.keyMap[e.key] ? this.keyMap[e.key] : e.key;
+        this.pressed = digit;
+        if (this.order.includes(digit)) {
+            this.triggerClick(digit);
         }
-      }
+    }
+    
+    triggerClick(digit) {
+        if (this.operators.includes(digit)) {
+            this.handleOperators(digit);
+          } else if (this.resolvers.includes(digit)) {
+            this.handleResolvers(digit);
+          } else if (this.resetters.includes(digit)) {
+              this.handleResetters(digit);
+          } else if (digit === '.') {  
+                this.handleDecimal();
+          } else {
+              this.handleDigits(digit);
+        }
+    }
     
     getReadout(readout) {
         let num = Number(readout);
@@ -40,20 +51,40 @@ import './App.scss';
 
     setReadout(readout) {
         let rd = readout.toString();
+        let minus = rd.substring(0,1) === '-' && readout ? '-' : '';
         rd = rd.replace(/[^0-9\.]/g, '');
-        if (/^0[^\.]/.test(rd)) {
-            rd = rd.replace(/^0*/, '');
+        if (/^0+[^\.]/.test(rd)) {
+            rd = rd.replace(/^0+/, '');
         }
         let rds = rd.split('.');
         let rdo = rds.splice(0,1);
-        let res = rdo.join('') + '.' + rds.join('').replace(/0*$/, '');
+        let res = rdo.join('') + '.' + rds.join('').replace(/0+$/, '');
         if (res.indexOf('.') < 0) {
           res += '.';
         }
-        if (!res || res === '.') {
+        if (res.substring(0,1) === '.') {
+            res = '0' + res;
+        }
+        if (res.length > 12) {
+            res = Number(res).toExponential();
+        }
+        if (!res) {
             res = '0.';
         }
-        return res;
+        return minus + res;
+    }
+    
+    
+    set pressed(p) {
+        this._pressed = !p ? [] : this._pressed || [];
+        if (this._pressed.length >= 25) {
+            this._pressed.pop();
+        }  
+        this._pressed.unshift(p);  
+    }
+    
+    get pressed() {
+        return this._pressed.filter(press => !['Shift', 'Tab', 'Control', 'Alt', 'Meta'].includes(press));
     }
     
     reset(partial, last) {
@@ -163,7 +194,7 @@ import './App.scss';
                 readout: state.readout,
                 operator: newOperator
             }
-            if (!state.tally) {
+            if (!state.tally && !this.resolvers.includes(lastPressed)) {
                 return res;
             }
             let currentValue = this.getReadout(state.readout);
@@ -195,9 +226,18 @@ import './App.scss';
         }
         return arr;
     }
-
+    
+    componentDidMount() {
+        document.getElementById('screen').focus();
+        let $this = this;
+        document.addEventListener('keyup', e => {
+            console.log(e.key);
+            $this.handlePress(e);
+        });
+    }
     
     render() {
+        
         let btns = (this.order.map((digit, index) => {
             return <CalcButton display={digit} clickHandler={this.handleClick}  key={index} active={this.state.operator} />
         }));
