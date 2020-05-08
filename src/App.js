@@ -10,133 +10,35 @@ import './App.scss';
       super(props);
       this.state = {
         lastPressed: null,
-        display: '0.',
+        readout: '0.',
         operator: null,  
         tally:0,
-        currentValue: 0,
         resetReadout: true  
       }
       this.handleClick = this.handleClick.bind(this);
     }
     
     handleClick(e) {
-      let digit = e.target.innerText;
-      if (this.operators.includes(digit)) {
-        this.handleOperators(digit);
-      } else if (this.resolvers.includes(digit)) {
-        this.handleResolvers(digit);
-      } else if (this.resetters.includes(digit)) {
-          this.handleResetters(digit);
-      } else if (digit === '.') {  
-            this.handleDecimal();
-      } else {
-          this.handleDigits(digit);
+        let digit = e.target.innerText;
+        if (this.operators.includes(digit)) {
+          this.handleOperators(digit);
+        } else if (this.resolvers.includes(digit)) {
+          this.handleResolvers(digit);
+        } else if (this.resetters.includes(digit)) {
+            this.handleResetters(digit);
+        } else if (digit === '.') {  
+              this.handleDecimal();
+        } else {
+            this.handleDigits(digit);
+        }
       }
-    }
     
-    reset(partial, last) {
-        last = last || null;
-        this.setState(({lastPressed}) => {
-            let st = {
-                display: '0.',
-                currentValue: 0,
-                operator: null,
-                resetReadout: true
-            }
-            if (!partial && lastPressed !== 'C') {
-                st.tally = 0;
-            }
-            return st;
-        }, () => { this.setState({ lastPressed: last })  });
-    }
-    
-    handleResetters(digit) {
-        let partial = digit === 'C';
-        this.reset(partial, digit);
+    getReadout(readout) {
+        let num = Number(readout);
+        return isNaN(num) ? 0 : num;
     }
 
-    handleResolvers(digit) {
-         switch(digit) {
-             default: this.handleEquals();
-             break;
-         }       
-    }
-    
-    handleEquals() {
-        this.operate({
-            operator:null,
-            resetReadout: true,
-            lastPressed: '='
-        });    
-    }
-    
-    handleDigits(digit) {
-        this.setState(state => {
-            if (state.resetReadout) {
-                return {
-                    display: this.setDisplay(digit),
-                    currentValue: Number(digit),
-                    resetReadout: false
-                }
-            }
-            let display = state.currentValue.toString();
-            let decimal = state.lastPressed === '.' ? '.' : '';
-            let val = display + decimal + digit.toString();
-            return {
-                display: this.setDisplay(val),
-                currentValue: Number(val),
-                lastPressed: digit
-            }
-        });
-    }
-    
-    handleOperators(digit) {
-        this.setState({
-            operator: digit
-        }, () => { 
-            this.operate({
-                lastPressed:digit,
-                resetReadout: true
-            });
-        });
-    }
-    
-    handleDecimal() {
-        this.setState(state => {
-            let val = state.currentValue === parseInt(state.currentValue) ? '.' : state.lastPressed;
-            return {
-                lastPressed: val
-            }
-        });
-    }
-
-    operate(state) {
-        this.setState(({operator, currentValue, tally }) => {
-            switch(operator) {
-                case '-': tally -= currentValue;
-                currentValue = 0;
-                break;
-                case 'x': tally *= currentValue;
-                currentValue = 0;
-                break;
-                case '/': tally /= currentValue;
-                currentValue = 0;
-                break;
-                case '+': tally += currentValue;
-                currentValue = 0;
-                break;
-                default: tally += 0;
-                break;
-            }
-            return {
-                tally: tally,
-                currentValue: currentValue,
-                display: this.setDisplay(tally)
-            }
-        }, () => { this.setState(state) });  
-    }
-
-    setDisplay(readout) {
+    setReadout(readout) {
         let rd = readout.toString();
         rd = rd.replace(/[^0-9\.]/g, '');
         if (/^0[^\.]/.test(rd)) {
@@ -151,9 +53,126 @@ import './App.scss';
         return res;
     }
     
-    getDisplay(display) {
-        let d = Number(display);
-        return isNaN(d) ? 0 : d;
+    reset(partial, last) {
+        last = last || null;
+        this.setState(({lastPressed}) => {
+            let st = {
+                readout: '0.',
+                operator: null,
+                resetReadout: true
+            }
+            if (!partial && lastPressed !== 'C') {
+                st.tally = 0;
+            }
+            return st;
+        }, () => { this.setState({ lastPressed: last })  });
+    }
+    
+    handleDigits(digit) {
+        this.setState(function(state) {
+            let readout = this.getReadout(state.readout);
+            let tally = state.tally;
+            if (state.resetReadout) {
+                if (state.operator) {
+                    tally = tally ? this.operate(state.operator, tally, readout) : readout;
+                } else {
+                    tally = readout;
+                }
+                readout = digit.toString();
+            } else {
+                readout = readout.toString() + digit.toString();
+            }
+            if (state.lastPressed === '.') {
+                readout = '.' + readout;
+            }
+            let res = this.setReadout(readout);
+            return {
+                lastPressed: digit,
+                resetReadout: false,
+                readout: res,
+                tally: tally
+            }
+        });
+    }
+    
+    handleDecimal() {
+        this.setState(function(state) {
+            let currentValue = this.getReadout(state.readout);
+            let val = currentValue === parseInt(currentValue) ? '.' : state.lastPressed;
+            return {
+                lastPressed: val,
+                resetReadout: false
+            }
+        });
+    }
+    
+    handleResetters(digit) {
+        let partial = digit === 'C';
+        this.reset(partial, digit);
+    }
+    
+    handleOperators(digit) {
+        this.equate(digit, digit, digit);
+    }
+    
+    handleResolvers(digit) {
+        this.equate(null, digit, null, function(tally) {
+            let res;
+            switch(digit) {
+                case this.squareRoot: res = Math.sqrt(tally);
+                break;
+                case '%': res = tally/100;
+                break;
+                case '+/-': res = tally*-1;
+                break;
+                default: res = tally;
+                break;
+            }
+            return res;
+        });
+    }
+    
+    operate(operator, total, currentValue) {
+        let tally = Number(total);
+        if (!tally || isNaN(tally)) {
+            tally = 0;
+        }
+        currentValue = Number(currentValue);
+        switch(operator) {
+            case '-': tally -= currentValue;
+            break;
+            case 'x': tally *= currentValue;
+            break;
+            case '/': tally /= currentValue;
+            break;
+            default: tally += currentValue;
+            break;
+        }
+        return tally;
+    }
+    
+    equate(operator, lastPressed, newOperator, displayCallback) {
+        this.setState(function(state) {
+            let res = {
+                lastPressed: lastPressed,
+                resetReadout: true,
+                tally: state.tally,
+                readout: state.readout,
+                operator: newOperator
+            }
+            if (!state.tally) {
+                return res;
+            }
+            let currentValue = this.getReadout(state.readout);
+            operator = operator || state.operator;
+            let tally = this.operate(operator, state.tally, currentValue);
+            if (typeof displayCallback === 'function') {
+                tally = displayCallback.call(this, tally);
+            }
+            res.readout = this.setReadout(tally);
+            res.tally = 0;
+            return res;
+        })
     }
     
     getButtonClasses() {
@@ -181,7 +200,7 @@ import './App.scss';
         }));
       return <div className="container">
         <div className="top">
-          <CalcScreen readout={this.state.display} />
+          <CalcScreen readout={this.state.readout} />
         </div>
         <div className="bottom">
           { btns }

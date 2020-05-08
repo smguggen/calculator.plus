@@ -15,12 +15,13 @@ export default class CalcHelper extends Component {
             Equals: '=',
             Decimal: '.'
         };
+        this.alts = ['%'];
         
         this.order = ['AC', 'C', this.squareRoot, '+', 7, 8, 9, '-',
-        4, 5, 6, 'x', 1, 2, 3, '/', '%',
+        4, 5, 6, 'x', 1, 2, 3, '/', '+/-',
         0, '.', '='];
         this.operators = ['+', '-', '/', 'x'];
-        this.resolvers = ['=', '%', this.squareRoot];
+        this.resolvers = ['=', '+/-', this.squareRoot];
         this.resetters = ['AC', 'C'];
         this.symbols = Object.values(this.dict);
     }
