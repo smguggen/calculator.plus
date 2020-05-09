@@ -1,7 +1,25 @@
 {
-  "name": "calculator",
+  "name": "calculator.plus",
+  "description": "It's a calculator. Plus...",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smguggen/calculator.plus.git"
+  },
+  "author": { 
+      "name" : "Steven Guggenheimer", 
+      "email" : "sguggen@srcer.com"
+  },
+  "keywords": [
+    "calculator",
+    "math",
+    "javascript",
+    "react",
+    "plus",
+    "minus"
+  ],
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
