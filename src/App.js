@@ -55,7 +55,9 @@ import './App.scss';
             return rd;
         }
         let minus = rd.substring(0,1) === '-' && readout ? '-' : '';
+        // eslint-disable-next-line
         rd = rd.replace(/[^0-9\.]/g, '');
+        // eslint-disable-next-line
         if (/^0+[^\.]/.test(rd)) {
             rd = rd.replace(/^0+/, '');
         }
