@@ -5,23 +5,23 @@ import CalcScreen from './views/Screen';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 
-  class Calc extends Helper {
+class Calc extends Helper {
     constructor(props) {
-      super(props);
-      this.state = {
-        lastPressed: null,
-        readout: '0.',
-        operator: null,  
-        tally:0,
-        resetReadout: true  
-      }
-      this.handleClick = this.handleClick.bind(this);
+        super(props);
+        this.state = {
+            lastPressed: null,
+            readout: '0.',
+            operator: null,
+            tally: 0,
+            resetReadout: true
+        }
+        this.handleClick = this.handleClick.bind(this);
     }
-    
+
     handleClick(e) {
         this.triggerClick(e.target.innerText);
     }
-    
+
     handlePress(e) {
         let digit = this.keyMap[e.key] ? this.keyMap[e.key] : e.key;
         this.pressed = digit;
@@ -29,21 +29,21 @@ import './App.scss';
             this.triggerClick(digit);
         }
     }
-    
+
     triggerClick(digit) {
         if (this.operators.includes(digit)) {
             this.handleOperators(digit);
-          } else if (this.resolvers.includes(digit)) {
+        } else if (this.resolvers.includes(digit)) {
             this.handleResolvers(digit);
-          } else if (this.resetters.includes(digit)) {
-              this.handleResetters(digit);
-          } else if (digit === '.') {  
-                this.handleDecimal();
-          } else {
-              this.handleDigits(digit);
+        } else if (this.resetters.includes(digit)) {
+            this.handleResetters(digit);
+        } else if (digit === '.') {
+            this.handleDecimal();
+        } else {
+            this.handleDigits(digit);
         }
     }
-    
+
     getReadout(readout) {
         let num = Number(readout);
         return isNaN(num) ? 0 : num;
@@ -54,7 +54,7 @@ import './App.scss';
         if (rd.indexOf('e') > -1 || isNaN(rd) || readout === Infinity) {
             return rd;
         }
-        let minus = rd.substring(0,1) === '-' && readout ? '-' : '';
+        let minus = rd.substring(0, 1) === '-' && readout ? '-' : '';
         // eslint-disable-next-line
         rd = rd.replace(/[^0-9\.]/g, '');
         // eslint-disable-next-line
@@ -62,12 +62,12 @@ import './App.scss';
             rd = rd.replace(/^0+/, '');
         }
         let rds = rd.split('.');
-        let rdo = rds.splice(0,1);
+        let rdo = rds.splice(0, 1);
         let res = rdo.join('') + '.' + rds.join('').replace(/0+$/, '');
         if (res.indexOf('.') < 0) {
-          res += '.';
+            res += '.';
         }
-        if (res.substring(0,1) === '.') {
+        if (res.substring(0, 1) === '.') {
             res = '0' + res;
         }
         let limit = document.getElementById('screen').offsetWidth > 400 ? 12 : 8;
@@ -79,23 +79,23 @@ import './App.scss';
         }
         return minus + res;
     }
-    
-    
+
+
     set pressed(p) {
         this._pressed = !p ? [] : this._pressed || [];
         if (this._pressed.length >= 25) {
             this._pressed.pop();
-        }  
-        this._pressed.unshift(p);  
+        }
+        this._pressed.unshift(p);
     }
-    
+
     get pressed() {
         return this._pressed.filter(press => !['Shift', 'Tab', 'Control', 'Alt', 'Meta'].includes(press));
     }
-    
+
     reset(partial, last) {
         last = last || null;
-        this.setState(({lastPressed}) => {
+        this.setState(({ lastPressed }) => {
             let st = {
                 readout: '0.',
                 operator: null,
@@ -105,11 +105,11 @@ import './App.scss';
                 st.tally = 0;
             }
             return st;
-        }, () => { this.setState({ lastPressed: last })  });
+        }, () => { this.setState({ lastPressed: last }) });
     }
-    
+
     handleDigits(digit) {
-        this.setState(function(state) {
+        this.setState(function (state) {
             let readout = this.getReadout(state.readout);
             let tally = state.tally;
             if (state.resetReadout) {
@@ -119,12 +119,15 @@ import './App.scss';
                     tally = readout;
                 }
                 readout = digit.toString();
+                if (state.lastPressed === '.') {
+                    readout = '.' + readout;
+                }
             } else {
-                readout = readout.toString() + digit.toString();
+                readout = readout.toString() + 
+                    (state.lastPressed === '.' ? '.' : '') +
+                    digit.toString();
             }
-            if (state.lastPressed === '.') {
-                readout = '.' + readout;
-            }
+      
             let res = this.setReadout(readout);
             return {
                 lastPressed: digit,
@@ -134,9 +137,9 @@ import './App.scss';
             }
         });
     }
-    
+
     handleDecimal() {
-        this.setState(function(state) {
+        this.setState(function (state) {
             let currentValue = this.getReadout(state.readout);
             let val = currentValue === parseInt(currentValue) ? '.' : state.lastPressed;
             return {
@@ -145,54 +148,54 @@ import './App.scss';
             }
         });
     }
-    
+
     handleResetters(digit) {
         let partial = digit === 'C';
         this.reset(partial, digit);
     }
-    
+
     handleOperators(digit) {
         this.equate(digit, digit, digit);
     }
-    
+
     handleResolvers(digit) {
-        this.equate(null, digit, null, function(tally) {
+        this.equate(null, digit, null, function (tally) {
             let res;
-            switch(digit) {
+            switch (digit) {
                 case this.squareRoot: res = Math.sqrt(tally);
-                break;
-                case '%': res = tally/100;
-                break;
-                case '+/-': res = tally*-1;
-                break;
+                    break;
+                case '%': res = tally / 100;
+                    break;
+                case '+/-': res = tally * -1;
+                    break;
                 default: res = tally;
-                break;
+                    break;
             }
             return res;
         });
     }
-    
+
     operate(operator, total, currentValue) {
         let tally = Number(total);
         if (!tally || isNaN(tally)) {
             tally = 0;
         }
         currentValue = Number(currentValue);
-        switch(operator) {
-            case '-': tally -= currentValue;
-            break;
-            case 'x': tally *= currentValue;
-            break;
-            case '/': tally /= currentValue;
-            break;
-            default: tally += currentValue;
-            break;
+        switch (operator) {
+            case '-': tally = Math.round((tally - currentValue)*1e12)/1e12;
+                break;
+            case 'x': tally = Math.round((tally * currentValue)*1e12)/1e12;
+                break;
+            case '/': tally = Math.round((tally / currentValue)*1e12)/1e12;
+                break;
+            default:  tally = Math.round((tally + currentValue)*1e12)/1e12;
+                break;
         }
         return tally;
     }
     
     equate(operator, lastPressed, newOperator, displayCallback) {
-        this.setState(function(state) {
+        this.setState(function (state) {
             let res = {
                 lastPressed: lastPressed,
                 resetReadout: true,
@@ -214,13 +217,13 @@ import './App.scss';
             return res;
         })
     }
-    
+
     getButtonClasses() {
         let cl = this.getKey(this.props.display).toString().toLowerCase();
         let arr = ['btn', 'calc-' + cl];
         if (this.operators.includes(this.props.display)) {
             arr.push('calc-operator');
-        } 
+        }
         if (this.symbols.includes(this.props.display)) {
             arr.push('calc-symbol');
         }
@@ -232,32 +235,32 @@ import './App.scss';
         }
         return arr;
     }
-    
+
     componentDidMount() {
         document.getElementById('screen').focus();
         let $this = this;
         document.addEventListener('keyup', e => {
+            console.log(e.key);
             $this.handlePress(e);
         });
     }
-    
+
     render() {
-        
+
         let btns = (this.order.map((digit, index) => {
-            return <CalcButton display={digit} clickHandler={this.handleClick}  key={index} active={this.state.operator} />
+            return <CalcButton display={digit} clickHandler={this.handleClick} key={index} active={this.state.operator} />
         }));
-      return <div className="container">
-        <div className="top">
-          <CalcScreen readout={this.state.readout} />
+        return <div className="container">
+            <div className="top">
+                <CalcScreen readout={this.state.readout} />
+            </div>
+            <div className="bottom">
+                {btns}
+            </div>
         </div>
-        <div className="bottom">
-          { btns }
-        </div>  
-      </div>
     }
-  }
-  
-export default Calc;  
-  
-  
-  
+}
+
+export default Calc;
+
+

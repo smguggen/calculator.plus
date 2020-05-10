@@ -106,10 +106,21 @@ html {
   }
   
   @media screen and (orientation:portrait) {
+      html {
+          padding:10px;
+      }
       .container {
-          width: 98%;
+          width: 100vw;
+          height:100vh;
+          
       }
       .bottom {
         grid-template-columns: repeat(auto-fill, 65px);
+        grid-gap:25px 20px;
+        button {
+            &.btn {
+                height:85px;
+            }
+        }
       }
   }

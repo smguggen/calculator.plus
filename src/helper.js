@@ -34,7 +34,8 @@ export default class CalcHelper extends Component {
             '&': '+',
             '_': '-',
             'c': 'C',
-            'a': 'A' 
+            'a': 'AC',
+            'Backspace': 'C'
         }
     }
     
