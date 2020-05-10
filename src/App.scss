@@ -1,4 +1,5 @@
 $states: "&:hover, &:active, &:visited, &:focus, &.focus, &.active";
+
 @mixin noOutline {
     #{$states} {
         outline-style:solid !important;
@@ -34,10 +35,21 @@ html {
   
   .bottom {
      display: grid;
-     grid-template-columns: repeat(auto-fill, 85px);
+     grid-template-columns: repeat(4, 20%);
      grid-gap: 20px;
+     
      justify-content: center;
      height:400px;
+  }
+  
+  @for $i from 1 through 4 {
+      .grid-row-#{$i} {
+          grid-row:#{$i}
+          
+      }
+      .grid-col-#{$i} {
+          grid-column:#{$i};
+      }
   }
   
   .calc-screen {
@@ -112,15 +124,5 @@ html {
       .container {
           width: 100vw;
           height:100vh;
-          
-      }
-      .bottom {
-        grid-template-columns: repeat(auto-fill, 65px);
-        grid-gap:25px 20px;
-        button {
-            &.btn {
-                height:85px;
-            }
-        }
       }
   }

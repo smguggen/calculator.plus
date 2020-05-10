@@ -182,6 +182,7 @@ class Calc extends Helper {
         }
         currentValue = Number(currentValue);
         switch (operator) {
+            //using this formula normalizes numbers to correct for javascript's floating point math issue (https://gist.github.com/lsloan/f8c5ab552545ee968cca)
             case '-': tally = Math.round((tally - currentValue)*1e12)/1e12;
                 break;
             case 'x': tally = Math.round((tally * currentValue)*1e12)/1e12;
@@ -248,7 +249,7 @@ class Calc extends Helper {
     render() {
 
         let btns = (this.order.map((digit, index) => {
-            return <CalcButton display={digit} clickHandler={this.handleClick} key={index} active={this.state.operator} />
+            return <CalcButton display={digit} clickHandler={this.handleClick} key={index} active={this.state.operator} index={index} />
         }));
         return <div className="container">
             <div className="top">
