@@ -1,25 +1,19 @@
-$states: "&:hover, &:active, &:visited, &:focus, &.focus, &.active";
-
-@mixin noOutline {
-    #{$states} {
-        outline-style:solid !important;
-        outline-width:0 !important;
-        outline-color:transparent !important;
-    }
-}
+@import './settings';
+@import './mixins';
 
 html {
     display:flex;
     justify-content:center;
     padding:50px 30px;
     min-width:450px;
+    
   }
   
   .container {
     display:flex;
     flex-direction:column;
     padding:30px;
-    background-color:#dedede;
+    background-color:$bg;
     border-radius:10%;
     width:500px;
     height:650px;
@@ -30,7 +24,7 @@ html {
     display:flex;
     margin:0 -30px 25px;
     justify-content:center;
-    border-bottom: 1px solid #cdcdcd;
+    border-bottom: 1px solid $divider;
   }
   
   .bottom {
@@ -59,11 +53,11 @@ html {
     height: 60px;
     line-height:57px;
     margin: 10px 45px 25px;
-    background-color:#fff;
-    border: 2px solid #cdcdcd;
+    background-color:$screen;
+    border: 2px solid $divider;
     width:100%;
     resize:none;
-    color:#000;
+    color:$readout;
     font-size:32px;
     @include noOutline;
   }
@@ -77,22 +71,22 @@ html {
       font-size:42px;
       line-height:40px;
       margin:0;
-      background-color:#aeaeae;  
-      color:#fff;
+      background-color:$btn;  
+      color:$digit;
       box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.5);
       border:none;
       &:hover {
-          color:#fff;
-          background-color:#7e7e7e;
+          color:$digit;
+          background-color:$hover;
       }
       &.calc-operator {
-          background-color:#7e7e7e;
+          background-color:$hover;
         &.active, &:hover {
-          background-color: #ffae42;
+          background-color: $active;
         }
       }
       &.calc-reset {
-        background-color: #ffae42;
+        background-color: $active;
       }
       &.calc-symbol {
           span {
@@ -108,7 +102,7 @@ html {
         box-shadow:1px 1px 1px 1px rgba(0,0,0,0.5) !important;
       }
       &.active {
-        background-color: #ffae42;
+        background-color: $active;
       }
       &:active {
         position:relative;
@@ -118,16 +112,28 @@ html {
   }
   
   @media screen and (orientation:portrait) {
-      html {
-          padding:10px;
+      html, body {
+          padding:0;
+          background-color:$bg;
       }
+
       .container {
           width: 100vw;
           height:100vh;
+          background-color:transparent;
+      }
+      .bottom {
+          grid-gap:25px;
+          grid-row-gap: 35px;
+          button {
+            &.btn {
+                height:85px;
+            }
+        }
       }
   }
   
-  @media screen and (max-height:600px) and (orientation:portrait) {
+  @media screen and (max-height:725px) and (orientation:portrait) {
 
     .bottom {
       grid-gap:10px;

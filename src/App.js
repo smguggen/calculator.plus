@@ -3,7 +3,7 @@ import Helper from './helper';
 import CalcButton from './views/Button';
 import CalcScreen from './views/Screen';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.scss';
+import './styles/App.scss';
 
 class Calc extends Helper {
     constructor(props) {

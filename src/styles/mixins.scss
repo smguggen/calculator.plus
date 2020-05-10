@@ -1,0 +1,9 @@
+$states: "&:hover, &:active, &:visited, &:focus, &.focus, &.active";
+
+@mixin noOutline {
+    #{$states} {
+        outline-style:solid !important;
+        outline-width:0 !important;
+        outline-color:transparent !important;
+    }
+}
