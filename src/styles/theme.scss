@@ -29,16 +29,18 @@
                 &.btn {
                     background-color:$btn;  
                     color:$digit;
-                    box-shadow: 1px 1px 1px 1px $btnShadow;
+                    #{$states} {
+                        box-shadow:1px 1px 1px 1px $btnShadow !important;
+                    }
                     &:hover {
                         color:$digit;
                         background-color:$hover;
                     }
                     &.calc-operator {
                         background-color:$hover;
-                    &.active, &:hover {
-                        background-color: $active;
-                    }
+                        &.active, &:hover {
+                            background-color: $active !important;
+                        }
                     }
                     &.calc-reset {
                     background-color: $active;
@@ -55,6 +57,16 @@
         .wrapper {
             &.#{$name} {
                 background-color:$bg;
+            }
+        }
+    }
+    
+    @media (hover: none) {
+        button {
+            &.btn {
+                &:hover, &:visited {
+                    background-color: $btn;
+                }
             }
         }
     }

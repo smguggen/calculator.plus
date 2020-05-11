@@ -1,4 +1,4 @@
-$states: "&:hover, &:active, &:visited, &:focus, &.focus, &.active";
+$states: "&:hover, &:active, &:visited, &:focus";
 
 @mixin noOutline {
     #{$states} {
