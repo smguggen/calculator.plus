@@ -19,7 +19,7 @@ class Calc extends Helper {
     }
 
     handleClick(e) {
-        this.triggerClick(e.target.innerText);
+        this.triggerClick(e.target.textContent);
     }
 
     handlePress(e) {
@@ -79,7 +79,6 @@ class Calc extends Helper {
         }
         return minus + res;
     }
-
 
     set pressed(p) {
         this._pressed = !p ? [] : this._pressed || [];
@@ -217,24 +216,6 @@ class Calc extends Helper {
             res.tally = 0;
             return res;
         })
-    }
-
-    getButtonClasses() {
-        let cl = this.getKey(this.props.display).toString().toLowerCase();
-        let arr = ['btn', 'calc-' + cl];
-        if (this.operators.includes(this.props.display)) {
-            arr.push('calc-operator');
-        }
-        if (this.symbols.includes(this.props.display)) {
-            arr.push('calc-symbol');
-        }
-        if (['AC', 'C'].includes(this.props.display)) {
-            arr.push('calc-reset');
-        }
-        if (!isNaN(Number(this.props.display))) {
-            arr.push('calc-digit');
-        }
-        return arr;
     }
 
     componentDidMount() {

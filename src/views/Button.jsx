@@ -9,9 +9,10 @@ export default class CalcButton extends Helper {
     
     getClasses() {
         let cl = this.getKey(this.props.display).toString().toLowerCase();
+        this.id = `calc-${cl}`;
         let row = Math.floor((this.props.index + 4)/4);
         let col = (this.props.index % 4) + 1;
-        let arr = ['btn', `calc-${cl}`, `grid-col-${col}`, `grid-row-${row}`];
+        let arr = ['btn', this.id, `grid-col-${col}`, `grid-row-${row}`];
         
         if (this.operators.includes(this.props.display)) {
             arr.push('calc-operator');
@@ -31,7 +32,7 @@ export default class CalcButton extends Helper {
     render() {
         var cl = this.classes + (this.props.active && this.props.active === this.props.display ? ' active' : '');
       return (
-        <button type="input" onClick={this.props.clickHandler} className={cl}><span>{ this.props.display }</span></button>
+        <button id={this.id} type="input" onClick={this.props.clickHandler} className={cl}><span>{ this.props.display }</span></button>
       )
     }
   }
