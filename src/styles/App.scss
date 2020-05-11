@@ -1,7 +1,11 @@
 @import './settings';
 @import './mixins';
+@import './theme';
 
-html {
+html, body, #root {
+    @include fullScreen;
+}
+.wrapper {
     display:flex;
     justify-content:center;
     padding:50px 30px;
@@ -13,7 +17,6 @@ html {
     display:flex;
     flex-direction:column;
     padding:30px;
-    background-color:$bg;
     border-radius:10%;
     width:500px;
     height:650px;
@@ -24,7 +27,6 @@ html {
     display:flex;
     margin:0 -30px 25px;
     justify-content:center;
-    border-bottom: 1px solid $divider;
   }
   
   .bottom {
@@ -53,11 +55,8 @@ html {
     height: 60px;
     line-height:57px;
     margin: 10px 45px 25px;
-    background-color:$screen;
-    border: 2px solid $divider;
     width:100%;
     resize:none;
-    color:$readout;
     font-size:32px;
     @include noOutline;
   }
@@ -71,23 +70,7 @@ html {
       font-size:42px;
       line-height:40px;
       margin:0;
-      background-color:$btn;  
-      color:$digit;
-      box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.5);
       border:none;
-      &:hover {
-          color:$digit;
-          background-color:$hover;
-      }
-      &.calc-operator {
-          background-color:$hover;
-        &.active, &:hover {
-          background-color: $active;
-        }
-      }
-      &.calc-reset {
-        background-color: $active;
-      }
       &.calc-symbol {
           span {
             position:relative;
@@ -101,9 +84,6 @@ html {
       #{$states} {
         box-shadow:1px 1px 1px 1px rgba(0,0,0,0.5) !important;
       }
-      &.active {
-        background-color: $active;
-      }
       &:active {
         position:relative;
         top:1px;
@@ -111,10 +91,12 @@ html {
     }
   }
   
+  @include theme;
+  @include theme('dark',#333,#555,#111,#fff,#111,#fff,#777, #bbb);
+  
   @media screen and (orientation:portrait) {
-      html, body {
+      .wrapper {
           padding:0;
-          background-color:$bg;
       }
 
       .container {
@@ -136,17 +118,23 @@ html {
   @media screen and (max-height:725px) and (orientation:portrait) {
 
     .bottom {
-      grid-gap:10px;
       padding:0 0 50px;
+      grid-row-gap: 30px;
       button {
         &.btn {
-          font-size:20px;
-          height:45px;
+          font-size:28px;
+          height:65px;
           &.calc-digit, &.calc-reset {
             padding:0;
             margin:0;
+          }
+          &.calc-symbol {
+            span {
+                top:-2px
+            }
           }
         }
       }
     }
   }
+  

@@ -7,3 +7,10 @@ $states: "&:hover, &:active, &:visited, &:focus, &.focus, &.active";
         outline-color:transparent !important;
     }
 }
+
+@mixin fullScreen {
+    height:100%;
+    width:100%;
+    margin:0;
+    padding:0;
+}
