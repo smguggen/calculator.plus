@@ -1,15 +1,14 @@
 @mixin theme(
     $name: 'default',
     $bg: #dedede,
-    $divider: #cdcdcd,
-    $screen: #fff,
-    $readout: #000,
     $btn: #aeaeae,
-    $digit: #fff,
-    $hover: #7e7e7e,
+    $accent: #fff,
     $active: #ffae42,
-    $btnShadow: rgba(0,0,0,0.5),
+    $reverse: false
 ) {
+  
+    $btnShadow: rgba(0,0,0,0.5);
+    
     .wrapper {
         &.#{$name} {
             .container {
@@ -17,33 +16,51 @@
             }
 
             .top {
-                border-bottom: 1px solid $divider;
+                border-bottom: 1px solid $btn;
             }
 
             .calc-screen {
-                background-color:$screen;
-                border: 2px solid $divider;
-                color:$readout;
+                background-color:$accent;
+                border: 2px solid $btn;
+                color:#000;
+                text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
             }
             button {
                 &.btn {
+                    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
                     background-color:$btn;  
-                    color:$digit;
+                    color:$accent;
                     #{$states} {
                         box-shadow:1px 1px 1px 1px $btnShadow !important;
                     }
-                    &:hover {
-                        color:$digit;
-                        background-color:$hover;
+                    @if $reverse {
+                        &:hover {
+                            color:$btn;
+                            background-color:$accent;
+                        }
+                        &.calc-operator {
+                            color:$btn;
+                            background-color:$accent;
+                        }
+                    } @else {
+                        &:hover {
+                            color:$accent;
+                            background-color:darken($btn, 20%);
+                        }
+                        &.calc-operator {
+                            color:$accent;
+                            background-color:darken($btn, 20%);
+                        }
+                        
                     }
+                    
                     &.calc-operator {
-                        background-color:$hover;
                         &.active, &:hover {
                             background-color: $active !important;
                         }
                     }
                     &.calc-reset {
-                    background-color: $active;
+                        background-color: $active;
                     }
                     &.active {
                         background-color: $active;
@@ -53,7 +70,7 @@
         }
     }
 
-    @media screen and (orientation:portrait) {
+    @media accent and (orientation:portrait) {
         .wrapper {
             &.#{$name} {
                 background-color:$bg;

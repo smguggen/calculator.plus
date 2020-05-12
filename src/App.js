@@ -229,7 +229,6 @@ class Calc extends Helper {
     }
 
     render() {
-
         let btns = (this.order.map((digit, index) => {
             return <CalcButton display={digit} clickHandler={this.handleClick} key={index} active={this.state.operator} index={index} />
         }));

@@ -89,7 +89,11 @@ html, body, #root {
   }
   
   @include theme;
-  @include theme('dark',#333,#555,#111,#fff,#111,#fff,#777, #bbb);
+  @include theme('dark',#444,#222,#fff,#777, true);
+  @include theme('pop', #aaa,#b00050, #f6d9d6, true);
+  @include theme('pastel-2', #b4f6ff, #d5b4ff, #111, #ffb4fc, true);
+  @include theme('pastel', #ffb4fc, #b4e6ff, #111, #b4f6ff, true);
+  @include theme('psychedelic', #fd00ff, #fdff00, #3c00ff, #00ff38, true);
   
   @media screen and (orientation:portrait) {
       .wrapper {
