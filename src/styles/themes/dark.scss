@@ -1,0 +1,8 @@
+@use '../default' with (
+    $bg: #444,
+    $btn: #222,
+    $accent: "#fff",
+    $active: "#777",
+    $readout: "#fff",
+    $reverse: false 
+)

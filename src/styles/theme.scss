@@ -1,90 +1,60 @@
-@mixin theme(
-    $name: 'default',
-    $bg: #dedede,
-    $btn: #aeaeae,
-    $accent: #fff,
-    $active: #ffae42,
-    $reverse: false
-) {
-  
-    $btnShadow: rgba(0,0,0,0.5);
-    
-    .wrapper {
-        &.#{$name} {
-            .container {
-                background-color:$bg;
-            }
-
-            .top {
-                border-bottom: 1px solid $btn;
-            }
-
-            .calc-screen {
-                background-color:$accent;
-                border: 2px solid $btn;
-                color:#000;
-                text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
-            }
-            button {
-                &.btn {
-                    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
-                    background-color:$btn;  
-                    color:$accent;
-                    #{$states} {
-                        box-shadow:1px 1px 1px 1px $btnShadow !important;
-                    }
-                    @if $reverse {
-                        &:hover {
-                            color:$btn;
-                            background-color:$accent;
-                        }
-                        &.calc-operator {
-                            color:$btn;
-                            background-color:$accent;
-                        }
-                    } @else {
-                        &:hover {
-                            color:$accent;
-                            background-color:darken($btn, 20%);
-                        }
-                        &.calc-operator {
-                            color:$accent;
-                            background-color:darken($btn, 20%);
-                        }
-                        
-                    }
-                    
-                    &.calc-operator {
-                        &.active, &:hover {
-                            background-color: $active !important;
-                        }
-                    }
-                    &.calc-reset {
-                        background-color: $active;
-                    }
-                    &.active {
-                        background-color: $active;
-                    }
-                }
-            }
+@mixin theme($name: "default", $bg: #dedede, $btn: #aeaeae, $accent: #fff, $active: #ffae42, $reverse: false) {
+    .#{$name} {
+        .container {
+            background-color: $bg;
         }
-    }
 
-    @media accent and (orientation:portrait) {
-        .wrapper {
-            &.#{$name} {
-                background-color:$bg;
-            }
+        .top {
+            border-bottom: 1px solid $btn;
         }
-    }
-    
-    @media (hover: none) {
+
+        .calc-screen {
+            background-color: $accent;
+            border: 2px solid $btn;
+            color: #000;
+        }
         button {
             &.btn {
-                &:hover, &:visited {
-                    background-color: $btn;
+                background-color: $btn;
+                color: $accent;
+                @if $reverse {
+                    &:hover {
+                        color: $btn;
+                        background-color: $accent;
+                    }
+                    &.calc-operator {
+                        color: $btn;
+                        background-color: $accent;
+                    }
+                } @else {
+                    &:hover {
+                        color: $accent;
+                        background-color: darken($btn, 20%);
+                    }
+                    &.calc-operator {
+                        color: $accent;
+                        background-color: darken($btn, 20%);
+                    }
+                }
+
+                &.calc-operator {
+                    &.active,
+                    &:hover {
+                        background-color: $active !important;
+                    }
+                }
+                &.calc-reset {
+                    background-color: $active;
+                }
+                &.active {
+                    background-color: $active;
                 }
             }
+        }
+    }
+    @media screen and (orientation: portrait) {
+        .#{$name} {
+            background-color: $bg;
         }
     }
 }

@@ -14,7 +14,7 @@ class Calc extends Helper {
             operator: null,
             tally: 0,
             resetReadout: true,
-            theme: 'default'
+            theme: 'dark'
         }
         this.handleClick = this.handleClick.bind(this);
     }

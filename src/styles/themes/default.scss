@@ -1,0 +1,62 @@
+$name: 'default' !default;
+$bg: #dedede !default;
+$btn: #aeaeae  !default;
+$accent: #fff  !default;
+$active: #ffae42  !default;
+$reverse: false  !default;
+$readout: #000 !default;
+
+.container {
+    background-color: $bg;
+}
+.top {
+    border-bottom: 1px solid $btn;
+}
+.calc-screen {
+    background-color: $accent;
+    border: 2px solid $btn;
+}
+button {
+    &.btn {
+        background-color: $btn;
+        color: $accent;
+        @if $reverse {
+            &:hover {
+                color: $btn;
+                background-color: $accent;
+            }
+            &.calc-operator {
+                color: $btn;
+                background-color: $accent;
+            }
+        } @else {
+            &:hover {
+                color: $accent;
+                background-color: darken($btn, 20%);
+            }
+            &.calc-operator {
+                color: $accent;
+                background-color: darken($btn, 20%);
+            }
+        }
+
+        &.calc-operator {
+            &.active,
+            &:hover {
+                background-color: $active !important;
+            }
+        }
+        &.calc-reset {
+            background-color: $active;
+        }
+        &.active {
+            background-color: $active;
+        }
+    }
+}
+
+@media screen and (orientation: portrait) {
+    .wrapper {
+        background-color: $bg;
+    }
+}
