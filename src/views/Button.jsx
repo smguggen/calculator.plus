@@ -5,6 +5,11 @@ export default class CalcButton extends Helper {
     constructor(props) {
       super(props);
       this.classes = this.getClasses();
+      this.isOperator = this.classes.includes('calc-operator');
+      this.isReset = this.classes.includes('calc-reset');
+      this.state = this.getStyles();
+      this.hover = this.hover.bind(this);
+      this.unhover = this.unhover.bind(this);
     }
     
     getClasses() {
@@ -29,10 +34,47 @@ export default class CalcButton extends Helper {
         return arr.join(' ');
     }
     
+    getStyles() {
+        let css = this.props.styles;
+        console.log(css);
+        let active = this.isActive || this.isReset;
+        let hoverBg = !active && this.isOperator;
+        let type = active ? 'active' : hoverBg ? 'hoverBg' : 'btn';
+        return {
+            color: this.isOperator ? css.hoverColor : css.accent,
+            backgroundColor: css[type]
+        }
+    }
+    
+    hover() {
+        let css = this.props.styles;
+        this.setState({
+            color: css.hoverColor,
+            backgroundColor: this.isReset || (this.isOperator && this.isActive) ? this.darken(css.active, 20) : this.isOperator ? css.active : css.hoverBg
+        })
+    }
+    
+    unhover() {
+        this.setState(this.getStyles());
+    }
+    
     render() {
-        var cl = this.classes + (this.props.active && this.props.active === this.props.display ? ' active' : '');
+        this.isActive = this.props.active && this.props.active === this.props.display;
+        var cl = this.classes + (this.isActive ? ' active' : '');
+        
       return (
-        <button id={this.id} type="input" onClick={this.props.clickHandler} className={cl}><span>{ this.props.display }</span></button>
+        <button id={this.id} 
+            type="input" 
+            onClick={this.props.clickHandler} 
+            onMouseEnter={this.hover}
+            onMouseLeave={this.unhover}
+            className={cl}
+            style={this.state}
+        >
+            <span>
+                { this.props.display }
+            </span>
+        </button>
       )
     }
   }

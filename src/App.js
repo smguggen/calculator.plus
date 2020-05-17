@@ -8,15 +8,21 @@ import './styles/App.scss';
 class Calc extends Helper {
     constructor(props) {
         super(props);
+        this.defaultStyles = this.getDefaultStyles();
+        this.theme = this.props.match.params.theme || null;
         this.state = {
             lastPressed: null,
             readout: '0.',
             operator: null,
             tally: 0,
             resetReadout: true,
-            styles: null
+            opacity: this.theme ? 0 : 1,
+            styles: this.defaultStyles
         }
         this.handleClick = this.handleClick.bind(this);
+        if (this.theme) {
+            this.styles();
+        }
     }
 
     handleClick(e) {
@@ -218,6 +224,32 @@ class Calc extends Helper {
             return res;
         })
     }
+    
+    getDefaultStyles() {
+        return {
+            name: 'default',
+            bg: '#dedede',
+            btn: '#aeaeae',
+            accent: '#fff',
+            active: '#ffae42',
+            reverse: false,
+            readout: '#000',
+            hoverColor: '#fff',
+            hoverBg: this.darken('#aeaeae', 20)
+        }
+    }
+    
+    async styles() {
+        let { themes } = await import('./settings.config.json');
+        let styles = Object.assign({}, this.defaultStyles, themes && themes[this.theme] ? themes[this.theme] : {});
+        let css = Object.assign({}, styles);
+        css.hoverColor = styles.reverse ? css.btn : css.accent;
+        css.hoverBg = styles.reverse ? css.accent : this.darken(css.btn, 20);
+        this.setState({
+            opacity: 1,
+            styles: css
+        });
+    }
 
     componentDidMount() {
         document.getElementById('screen').focus();
@@ -230,12 +262,23 @@ class Calc extends Helper {
 
     render() {
         let btns = (this.order.map((digit, index) => {
-            return <CalcButton display={digit} clickHandler={this.handleClick} key={index} active={this.state.operator} index={index} />
+            return <CalcButton display={digit} clickHandler={this.handleClick} key={index} active={this.state.operator} styles={this.state.styles} index={index} />
         }));
-        return <div className='wrapper'>
-            <div className="container">
-                <div className="top">
-                    <CalcScreen readout={this.state.readout} />
+        return <div className='wrapper' style={{opacity: this.state.opacity}}>
+            <div className="container" style={
+                {
+                    backgroundColor: this.state.styles.bg
+                }}
+            >
+                <div className="top" style={
+                    {
+                        borderBottom: '1px solid ' + this.state.styles.btn 
+                    }}
+                >
+                    <CalcScreen readout={this.state.readout} 
+                        btn={this.state.styles.btn}
+                        accent={this.state.styles.accent}
+                    />
                 </div>
                 <div className="bottom">
                     {btns}

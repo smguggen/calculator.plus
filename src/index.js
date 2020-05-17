@@ -2,19 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 //import * as serviceWorker from './serviceWorker';
+
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
     <Switch>
-        <Route path="/:theme">
-            <App theme={this.props.match.params.theme} />
-        </Route>
-        <Route path="/">
-            <App theme="default" />
-        </Route>
+        <Route path="/:theme?" component={App} />
     </Switch>
     </BrowserRouter>
   </React.StrictMode>,
