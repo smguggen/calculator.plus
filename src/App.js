@@ -232,7 +232,7 @@ class Calc extends Helper {
         let btns = (this.order.map((digit, index) => {
             return <CalcButton display={digit} clickHandler={this.handleClick} key={index} active={this.state.operator} index={index} />
         }));
-        return className='wrapper'>
+        return <div className='wrapper'>
             <div className="container">
                 <div className="top">
                     <CalcScreen readout={this.state.readout} />
