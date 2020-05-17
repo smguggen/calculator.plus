@@ -14,7 +14,7 @@ class Calc extends Helper {
             operator: null,
             tally: 0,
             resetReadout: true,
-            theme: 'dark'
+            styles: null
         }
         this.handleClick = this.handleClick.bind(this);
     }
@@ -232,7 +232,7 @@ class Calc extends Helper {
         let btns = (this.order.map((digit, index) => {
             return <CalcButton display={digit} clickHandler={this.handleClick} key={index} active={this.state.operator} index={index} />
         }));
-        return <div className={'wrapper ' + this.state.theme}>
+        return className='wrapper'>
             <div className="container">
                 <div className="top">
                     <CalcScreen readout={this.state.readout} />
