@@ -1,7 +1,6 @@
 import React from 'react';
-import Helper from '../helper';
 
-export default class CalcScreen extends Helper {
+export default class CalcScreen extends React.Component {
     render() {
         return (
           <textarea id="screen" 

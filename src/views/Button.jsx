@@ -1,7 +1,6 @@
 import React from 'react';
-import Helper from '../helper';
-
-export default class CalcButton extends Helper {
+import settings from '../settings.config';
+export default class CalcButton extends React.Component {
     constructor(props) {
       super(props);
       this.classes = this.getClasses();
@@ -11,6 +10,14 @@ export default class CalcButton extends Helper {
       this.hover = this.hover.bind(this);
       this.unhover = this.unhover.bind(this);
     }
+
+    getKey(char) {
+        let key = Object.keys(settings.dictionary).find(key => char === settings.dictionary[key]);
+        if (!key) {
+          return char;
+        }
+        return key;
+    }
     
     getClasses() {
         let cl = this.getKey(this.props.display).toString().toLowerCase();
@@ -19,10 +26,10 @@ export default class CalcButton extends Helper {
         let col = (this.props.index % 4) + 1;
         let arr = ['btn', this.id, `grid-col-${col}`, `grid-row-${row}`];
         
-        if (this.operators.includes(this.props.display)) {
+        if (['+', '-', '/', 'x'].includes(this.props.display)) {
             arr.push('calc-operator');
         } 
-        if (this.symbols.includes(this.props.display)) {
+        if (Object.values(settings.dictionary).includes(this.props.display)) {
             arr.push('calc-symbol');
         }
         if (['AC', 'C'].includes(this.props.display)) {
@@ -36,7 +43,6 @@ export default class CalcButton extends Helper {
     
     getStyles() {
         let css = this.props.styles;
-        console.log(css);
         let active = this.isActive || this.isReset;
         let hoverBg = !active && this.isOperator;
         let type = active ? 'active' : hoverBg ? 'hoverBg' : 'btn';
@@ -50,7 +56,7 @@ export default class CalcButton extends Helper {
         let css = this.props.styles;
         this.setState({
             color: css.hoverColor,
-            backgroundColor: this.isReset || (this.isOperator && this.isActive) ? this.darken(css.active, 20) : this.isOperator ? css.active : css.hoverBg
+            backgroundColor: this.isReset || (this.isOperator && this.isActive) ? css.activeDark : this.isOperator ? css.active : css.hoverBg
         })
     }
     
