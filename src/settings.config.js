@@ -54,9 +54,9 @@ const settings = {
         },
         pastel: {
             bg: "#b4f6ff",
-            btn: "#ffb4fc",
+            btn: "#ff1493",
             accent: "#d5b4ff",
-            active: "#b4ccff",
+            active: "#4d4dff",
             readout: "#fff",
             reverse: true
         },
