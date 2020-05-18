@@ -12,28 +12,23 @@ class Router extends React.Component {
         return this.hue(col, perc, true);
     }
     
-    hue(col, perc, darken) {
-        perc = Math.abs(perc);
-        if (darken) {
-            perc*=-1;
+    range(num) {
+        if (num > 255) {
+            return 255;
+        } else if (num < 0) {
+            return 0;
         }
-        var R = parseInt(col.substring(1,3),16);
-        var G = parseInt(col.substring(3,5),16);
-        var B = parseInt(col.substring(5,7),16);
+        return num;
+    }
+     
+    hue(col, perc, darken) {
     
-        R = parseInt(R * (100 + perc) / 100);
-        G = parseInt(G * (100 + perc) / 100);
-        B = parseInt(B * (100 + perc) / 100);
-    
-        R = (R<255)?R:255;  
-        G = (G<255)?G:255;  
-        B = (B<255)?B:255;  
-    
-        var RR = ((R.toString(16).length===1)?"0"+R.toString(16):R.toString(16));
-        var GG = ((G.toString(16).length===1)?"0"+G.toString(16):G.toString(16));
-        var BB = ((B.toString(16).length===1)?"0"+B.toString(16):B.toString(16));
-    
-        return "#"+RR+GG+BB;
+        let num = parseInt(col.replace("#",""), 16);
+        let r = this.range((num >> 16) + perc);
+        let b = this.range(((num >> 8) & 0x00FF) + perc);
+		let g = this.range((num & 0x0000FF) + perc);
+
+		return '#' + (g | (b << 8) | (r << 16)).toString(16);
     }
     
     setStyles(theme) {
