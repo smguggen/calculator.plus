@@ -1,10 +1,17 @@
 import React from 'react';
-import Helper from '../helper';
 
-export default class CalcScreen extends Helper {
+export default class CalcScreen extends React.Component {
     render() {
         return (
-          <textarea id="screen" className="calc-screen" readOnly maxLength="15" value={ this.props.readout } onChange={this.props.handleChange} />
-        )
+          <textarea id="screen" 
+            value={ this.props.readout } 
+            style={{
+                border: '2px solid ' + this.props.btn,
+                backgroundColor: this.props.accent
+            }}
+            className="calc-screen" 
+            maxLength="15" 
+            readOnly
+        />)
       }
 }

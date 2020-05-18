@@ -1,137 +1,149 @@
-@import './settings';
-@import './mixins';
-@import './theme';
+@import "./settings";
+@import "./mixins";
 
-html, body, #root {
+html,
+body,
+#root {
     @include fullScreen;
 }
 .wrapper {
-    display:flex;
-    justify-content:center;
-    padding:50px 30px;
-    min-width:450px;
+    display: flex;
+    justify-content: center;
+    padding: 50px 30px;
+    min-width: 450px;
     touch-action: manipulation;
-  }
-  
-  .container {
-    display:flex;
-    flex-direction:column;
-    padding:30px;
-    border-radius:10%;
-    width:500px;
-    height:650px;
-    position:relative;
-  }
-  
-  .top {
-    display:flex;
-    margin:0 -30px 25px;
-    justify-content:center;
-  }
-  
-  .bottom {
-     display: grid;
-     grid-template-columns: repeat(4, 20%);
-     grid-gap: 20px;
-     
-     justify-content: center;
-     height:400px;
-  }
-  
-  @for $i from 1 through 4 {
-      .grid-row-#{$i} {
-          grid-row:#{$i}
-          
-      }
-      .grid-col-#{$i} {
-          grid-column:#{$i};
-      }
-  }
-  
-  .calc-screen {
-    text-align:right;
-    overflow:hidden;
-    padding:0 5px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    border-radius: 10%;
+    width: 500px;
+    height: 650px;
+    position: relative;
+}
+
+.top {
+    display: flex;
+    margin: 0 -30px 25px;
+    justify-content: center;
+}
+
+.bottom {
+    display: grid;
+    grid-template-columns: repeat(4, 20%);
+    grid-gap: 20px;
+
+    justify-content: center;
+    height: 400px;
+}
+
+@for $i from 1 through 4 {
+    .grid-row-#{$i} {
+        grid-row: #{$i};
+    }
+    .grid-col-#{$i} {
+        grid-column: #{$i};
+    }
+}
+
+.calc-screen {
+    text-align: right;
+    overflow: hidden;
+    padding: 0 5px;
     height: 60px;
-    line-height:57px;
+    line-height: 57px;
     margin: 10px 45px 25px;
-    width:100%;
-    resize:none;
-    font-size:32px;
+    width: 100%;
+    resize: none;
+    font-size: 32px;
     @include noOutline;
-  }
-  
-  button {
+}
+
+button {
     &.btn {
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      height:75px;
-      font-size:42px;
-      line-height:40px;
-      margin:0;
-      border:none;
-      &.calc-symbol {
-          span {
-            position:relative;
-            top:-4px;
-          }
-          &.calc-percent span {
-            top:-1px;
-        }
-      }
-      @include noOutline;
-      &:active {
-        position:relative;
-        top:1px;
-      }
-    }
-  }
-  
-  @include theme;
-  @include theme('dark',#333,#555,#111,#fff,#111,#fff,#777, #bbb);
-  
-  @media screen and (orientation:portrait) {
-      .wrapper {
-          padding:0;
-      }
-
-      .container {
-          width: 100vw;
-          height:100vh;
-          background-color:transparent;
-      }
-      .bottom {
-          grid-gap:25px;
-          grid-row-gap: 35px;
-          button {
-            &.btn {
-                height:85px;
-            }
-        }
-      }
-  }
-  
-  @media screen and (max-height:725px) and (orientation:portrait) {
-
-    .bottom {
-      padding:0 0 50px;
-      grid-row-gap: 30px;
-      button {
-        &.btn {
-          font-size:28px;
-          height:65px;
-          &.calc-digit, &.calc-reset {
-            padding:0;
-            margin:0;
-          }
-          &.calc-symbol {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 75px;
+        font-size: 42px;
+        line-height: 40px;
+        margin: 0;
+        border: none;
+        &.calc-symbol {
             span {
-                top:-2px
+                position: relative;
+                top: -4px;
             }
-          }
+            &.calc-percent span {
+                top: -1px;
+            }
         }
-      }
+        @include noOutline;
+        &:active {
+            position: relative;
+            top: 1px;
+        }
+        #{$states} {
+            box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5) !important;
+        }
     }
-  }
-  
+}
+
+@media screen and (orientation: portrait) {
+    
+    .wrapper {
+        @include fullScreen;
+    }
+
+    .container {
+        @include fullScreen;
+        border-radius:0;
+        max-width:none;
+        padding:30px;
+    }
+    
+    .bottom {
+        grid-gap: 25px;
+        grid-row-gap: 35px;
+        button {
+            &.btn {
+                height: 85px;
+            }
+        }
+    }
+}
+
+@media screen and (max-height: 725px) and (orientation: portrait) {
+    .bottom {
+        padding: 0 0 50px;
+        grid-row-gap: 30px;
+        button {
+            &.btn {
+                font-size: 28px;
+                height: 65px;
+                &.calc-digit,
+                &.calc-reset {
+                    padding: 0;
+                    margin: 0;
+                }
+                &.calc-symbol {
+                    span {
+                        top: -2px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (hover: none) {
+    button {
+        &.btn {
+            &:hover, &:visited {
+                background-color: inherit;
+            }
+        }
+    }
+}
