@@ -6,9 +6,6 @@ export default class CalcButton extends React.Component {
       this.classes = this.getClasses();
       this.isOperator = this.classes.includes('calc-operator');
       this.isReset = this.classes.includes('calc-reset');
-      this.state = this.getStyles();
-      this.hover = this.hover.bind(this);
-      this.unhover = this.unhover.bind(this);
     }
 
     getKey(char) {
@@ -40,29 +37,7 @@ export default class CalcButton extends React.Component {
         }
         return arr.join(' ');
     }
-    
-    getStyles() {
-        let css = this.props.styles;
-        let active = this.isActive || this.isReset;
-        let hoverBg = !active && this.isOperator;
-        let type = active ? 'active' : hoverBg ? 'hoverBg' : 'btn';
-        return {
-            color: this.isOperator ? css.hoverColor : css.accent,
-            backgroundColor: css[type]
-        }
-    }
-    
-    hover() {
-        let css = this.props.styles;
-        this.setState({
-            color: css.hoverColor,
-            backgroundColor: this.isReset || (this.isOperator && this.isActive) ? css.activeDark : this.isOperator ? css.active : css.hoverBg
-        })
-    }
-    
-    unhover() {
-        this.setState(this.getStyles());
-    }
+
     
     render() {
         this.isActive = this.props.active && this.props.active === this.props.display;
@@ -72,8 +47,6 @@ export default class CalcButton extends React.Component {
         <button id={this.id} 
             type="input" 
             onClick={this.props.clickHandler} 
-            onMouseEnter={this.hover}
-            onMouseLeave={this.unhover}
             className={cl}
             style={this.state}
         >

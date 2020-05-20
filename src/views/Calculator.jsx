@@ -4,6 +4,7 @@ import CalcScreen from './Screen';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.scss';
 import settings from '../settings.config';
+import Style from './Style';
 
 class Calc extends React.Component {
     constructor(props) {
@@ -226,32 +227,21 @@ class Calc extends React.Component {
             $this.handlePress(e);
         });
     }
-
+    
     render() {
-        let styles = this.props.styles;
         let btns = (settings.order.map((digit, index) => {
-            return <CalcButton display={digit} clickHandler={this.handleClick} key={index} active={this.state.operator} styles={styles} index={index} />
+            return <CalcButton display={digit} clickHandler={this.handleClick} key={index} active={this.state.operator} index={index} />
         }));
         return (<div className='wrapper'>
-            <div className="container" style={
-                {
-                    backgroundColor: styles.bg
-                }}
-            >
-                <div className="top" style={
-                    {
-                        borderBottom: '1px solid ' + styles.btn 
-                    }}
-                >
-                    <CalcScreen readout={this.state.readout} 
-                        btn={styles.btn}
-                        accent={styles.accent}
-                    />
+            <div className="container">
+                <div className="top">
+                    <CalcScreen readout={this.state.readout} />
                 </div>
                 <div className="bottom">
                     {btns}
                 </div>
             </div>
+            <Style theme={this.props.theme} />
         </div>)
     }
 }

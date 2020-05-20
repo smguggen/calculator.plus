@@ -10,6 +10,16 @@ class Colors {
         return colors.hue(col, perc, true);
     }
     
+    static opposite(col) {
+        let colors = new Colors();
+        let rgb = colors.getrgb(col);
+        let res = rgb.map(num => {
+            num = Number(num);
+            return 255 - Math.round(num);
+        }).join(',');
+        return `rgb(${res})`;
+    }
+    
     keepInRange(num) {
         if (num > 255) {
             return 255;
@@ -18,8 +28,8 @@ class Colors {
         }
         return num;
     }
-     
-    hue(col, perc, darken) {
+    
+    getrgb(col) {
         let rgb;
         if (col.substring(0,1) === 'r') {
             // eslint-disable-next-line
@@ -27,6 +37,11 @@ class Colors {
         } else {
             rgb = this.hextorgb(col); 
         }
+        return rgb;
+    }
+     
+    hue(col, perc, darken) {
+        let rgb = this.getrgb(col);
         let $this = this;
         let arr = rgb.map(num => {
             num = Number(num);
