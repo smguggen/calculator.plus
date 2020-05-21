@@ -1,15 +1,18 @@
 import React from 'react';
 import CalcButton from './Button';
 import CalcScreen from './Screen';
+import settings from '../settings.config';
+import Calculate from '../js/calculate';
+import Style from './Style';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.scss';
-import settings from '../settings.config';
-import Style from './Style';
 
-class Calc extends React.Component {
+const calculate = new Calculate(16);
+class Calculator extends React.Component {
     constructor(props) {
         super(props);
-        this.alts = [settings.dictionary.Radic];        
+        this.alts = [settings.dictionary.Radic];    
+            
         this.state = {
             lastPressed: null,
             readout: '0.',
@@ -18,6 +21,7 @@ class Calc extends React.Component {
             resetReadout: true,
         }
         this.handleClick = this.handleClick.bind(this);
+        this.screenClick = this.screenClick.bind(this);
     }
 
     handleClick(e) {
@@ -44,42 +48,6 @@ class Calc extends React.Component {
         } else {
             this.handleDigits(digit);
         }
-    }
-
-    getReadout(readout) {
-        let num = Number(readout);
-        return isNaN(num) ? 0 : num;
-    }
-
-    setReadout(readout) {
-        let rd = readout.toString();
-        if (rd.indexOf('e') > -1 || isNaN(rd) || readout === Infinity) {
-            return rd;
-        }
-        let minus = rd.substring(0, 1) === '-' && readout ? '-' : '';
-        // eslint-disable-next-line
-        rd = rd.replace(/[^0-9\.]/g, '');
-        // eslint-disable-next-line
-        if (/^0+[^\.]/.test(rd)) {
-            rd = rd.replace(/^0+/, '');
-        }
-        let rds = rd.split('.');
-        let rdo = rds.splice(0, 1);
-        let res = rdo.join('') + '.' + rds.join('').replace(/0+$/, '');
-        if (res.indexOf('.') < 0) {
-            res += '.';
-        }
-        if (res.substring(0, 1) === '.') {
-            res = '0' + res;
-        }
-        let limit = document.getElementById('screen').offsetWidth > 400 ? 12 : 8;
-        if (res.length > limit) {
-            res = Number(res).toExponential();
-        }
-        if (!res) {
-            res = '0.';
-        }
-        return minus + res;
     }
 
     set pressed(p) {
@@ -111,11 +79,11 @@ class Calc extends React.Component {
 
     handleDigits(digit) {
         this.setState(function (state) {
-            let readout = this.getReadout(state.readout);
+            let readout = calculate.getReadout(state.readout);
             let tally = state.tally;
             if (state.resetReadout) {
                 if (state.operator) {
-                    tally = tally ? this.operate(state.operator, tally, readout) : readout;
+                    tally = tally ? calculate.operate(state.operator, tally, readout) : readout;
                 } else {
                     tally = readout;
                 }
@@ -129,7 +97,7 @@ class Calc extends React.Component {
                     digit.toString();
             }
       
-            let res = this.setReadout(readout);
+            let res = calculate.setReadout(readout);
             return {
                 lastPressed: digit,
                 resetReadout: false,
@@ -141,7 +109,7 @@ class Calc extends React.Component {
 
     handleDecimal() {
         this.setState(function (state) {
-            let currentValue = this.getReadout(state.readout);
+            let currentValue = calculate.getReadout(state.readout);
             let val = currentValue === parseInt(currentValue) ? '.' : state.lastPressed;
             return {
                 lastPressed: val,
@@ -175,26 +143,6 @@ class Calc extends React.Component {
             return res;
         });
     }
-
-    operate(operator, total, currentValue) {
-        let tally = Number(total);
-        if (!tally || isNaN(tally)) {
-            tally = 0;
-        }
-        currentValue = Number(currentValue);
-        switch (operator) {
-            //using this formula normalizes numbers to correct for javascript's floating point math issue (https://gist.github.com/lsloan/f8c5ab552545ee968cca)
-            case '-': tally = Math.round((tally - currentValue)*1e12)/1e12;
-                break;
-            case 'x': tally = Math.round((tally * currentValue)*1e12)/1e12;
-                break;
-            case '/': tally = Math.round((tally / currentValue)*1e12)/1e12;
-                break;
-            default:  tally = Math.round((tally + currentValue)*1e12)/1e12;
-                break;
-        }
-        return tally;
-    }
     
     equate(operator, lastPressed, newOperator, displayCallback) {
         this.setState(function (state) {
@@ -208,16 +156,20 @@ class Calc extends React.Component {
             if (!state.tally && !settings.resolvers.includes(lastPressed)) {
                 return res;
             }
-            let currentValue = this.getReadout(state.readout);
+            let currentValue = calculate.getReadout(state.readout);
             operator = operator || state.operator;
-            let tally = this.operate(operator, state.tally, currentValue);
+            let tally = calculate.operate(operator, state.tally, currentValue);
             if (typeof displayCallback === 'function') {
                 tally = displayCallback.call(this, tally);
             }
-            res.readout = this.setReadout(tally);
+            res.readout = calculate.setReadout(tally);
             res.tally = 0;
             return res;
         })
+    }
+    
+    screenClick() {
+        
     }
 
     componentDidMount() {
@@ -235,7 +187,7 @@ class Calc extends React.Component {
         return (<div className='wrapper'>
             <div className="container">
                 <div className="top">
-                    <CalcScreen readout={this.state.readout} />
+                    <CalcScreen readout={this.state.readout} screenClick={this.screenClick}/>
                 </div>
                 <div className="bottom">
                     {btns}
@@ -246,4 +198,4 @@ class Calc extends React.Component {
     }
 }
 
-export default Calc;
+export default Calculator;
