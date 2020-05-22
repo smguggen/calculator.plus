@@ -29,6 +29,15 @@ body,
     justify-content: center;
 }
 
+.open-settings {
+    position:absolute;
+    top:10px;
+    left:50px;;
+    border-radius:35%;
+    height:15px;
+    width:30px;
+}
+
 .bottom {
     display: grid;
     grid-template-columns: repeat(4, 20%);
@@ -79,14 +88,14 @@ button {
                 top: -1px;
             }
         }
-        @include noOutline;
-        &:active {
-            position: relative;
-            top: 1px;
-        }
-        #{$states} {
-            box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5) !important;
-        }
+    }
+    button:active {
+        position: relative;
+        top: 1px;
+    }
+    @include noOutline;
+    #{$states} {
+        box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5) !important;
     }
 }
 

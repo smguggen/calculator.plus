@@ -30,6 +30,9 @@ class CalcTheme extends React.Component {
             .top {
                 border-bottom: 1px solid ${styles.btn};
             }
+            .open-settings {
+                background-color: ${styles.active};
+            }
             .calc-screen {
                 border: 2px solid ${styles.btn};
                 background-color: ${accent};
