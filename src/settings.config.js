@@ -33,7 +33,6 @@ const settings = {
             btn: "#aeaeae",
             accent: "#fff",
             active: "#ffae42",
-            readout: "#000",
             reverse: false 
         },
         dark: {
@@ -44,37 +43,32 @@ const settings = {
             reverse: false 
         },
         light: {
-            bg: "#fffff0",
-            btn: "#ddd",
-            accent: "#999",
-            active: "#bbb",
-            reverse: false 
+            bg: "#fafafa",
+            btn: "#fffff0",
+            active: "#eee",
+            reverse: true
         },
         contrast: {
             bg: "#444",
             btn: "#fffff0",
-            accent: "#222",
             active: "#ddd",
             reverse: true 
         },
         pop: {
             bg: "#aaa",
             btn: "#b00050",
-            accent: "#f6d9d6",
             active: "#023e4f",
             reverse: true
         },
         pastel: {
             bg: "#b4f6ff",
             btn: "#ff1493",
-            accent: "#d5b4ff",
             active: "#4d4dff",
             reverse: true
         },
         psychedelic: {
             bg: "#fd00ff",
             btn: "#3c00ff",
-            accent: "#fd5500",
             active: "#00ff38",
             reverse: true
         }
