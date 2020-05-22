@@ -10,7 +10,6 @@ class Calculate {
     }
     
     setReadout(readout) {
-        // normalize number before converting to string
         let num = Number(readout),
         str = readout.toString(),
         hasE = str.indexOf('e') > -1;
