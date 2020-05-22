@@ -6,7 +6,7 @@ import Calculate from '../js/calculate';
 import Style from './Style';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.scss';
-
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 const calculate = new Calculate(16);
 class Calculator extends React.Component {
     constructor(props) {
@@ -187,7 +187,7 @@ class Calculator extends React.Component {
         return (<div className='wrapper'>
             <div className="container">
                 <div className="top">
-                    <button id="open-settings" class="open-settings"></button>
+                    <button id="open-settings" className="open-settings"><PowerSettingsNewIcon fontSize="small"/></button>
                     <CalcScreen readout={this.state.readout} screenClick={this.screenClick}/>
                 </div>
                 <div className="bottom">

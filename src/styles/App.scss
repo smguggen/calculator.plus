@@ -17,7 +17,7 @@ body,
     display: flex;
     flex-direction: column;
     padding: 30px;
-    padding-top: 40px;
+    padding-top: 50px;
     border-radius: 10%;
     width: 500px;
     height: 650px;
@@ -32,11 +32,17 @@ body,
 
 .open-settings {
     position:absolute;
-    top:10px;
-    left:50px;;
+    top:20px;
+    left:45px;;
     border-radius:35%;
-    height:15px;
-    width:30px;
+    height:20px;
+    width:36px;
+    svg {
+        position:absolute;
+        font-size:16px;
+        top:1px;
+        left: 9px;
+    }
 }
 
 .bottom {
@@ -111,6 +117,7 @@ button {
         border-radius:0;
         max-width:none;
         padding:30px;
+        padding-top:50px;
     }
     
     .bottom {
@@ -121,6 +128,10 @@ button {
                 height: 85px;
             }
         }
+    }
+    .open-settings {
+        top:15px;
+        left:10px;
     }
 }
 
