@@ -10,20 +10,16 @@ class Calculate {
     }
     
     setReadout(readout) {
-        let str = readout.toString(),
+        // normalize number before converting to string
+        let num = Number(readout),
+        str = readout.toString(),
         hasE = str.indexOf('e') > -1;
         if (hasE) {
-            let fractionDigits = this.limit - 6;
-            return readout.toExponential(fractionDigits).replace(/\.(\d*)e/,(match, p1) => {
-                let hasVals = /[1-9]/.test(p1),
-                dec = hasVals ? '.' : '',
-                dig = p1.replace(/0+$/, '');
-                return dec + dig + 'e';
-            });
+            return this.eConvert(num);
         }
         let arr = str.split('.'),
         digits = arr.splice(0,1).join('').trim(), 
-        decimals = arr.join('').trim().replace(/[^0-9]/g, '').replace(/0+$/g, ''),
+        decimals = arr.join('').trim().replace(/[^0-9]/g, '').replace(/0+$/, ''),
         neg = digits.substring(0,1) === '-' ? '-' : '';
         
         digits = digits.replace(/[^0-9]/g, '')
@@ -35,17 +31,22 @@ class Calculate {
         res = neg + digits + '.' + decimals;
         
         if (digitCount > this.limit) {
-            let fractionDigits = this.limit - 6;
-            return Number(res).toExponential(fractionDigits);
+            return this.eConvert(Number(res));
         } else if (count > this.limit) {
             let fractionDigits = decimalCount - (count - this.limit);
             if (fractionDigits < 0) {
                 fractionDigits = 0;
             }
-            return Number(res).toFixed(fractionDigits).toString();
+            return parseFloat(Number(res).toFixed(fractionDigits)).toString();
         } else {
             return res;
         }
+    }
+    
+    eConvert(number) {
+        let limit = this.limit - 6,
+        res = number.toExponential().split('e');
+        return parseFloat(...res.splice(0,1)).toString().substring(0, limit) + (res.length ? 'e' : '') + res.join('');
     }
 
     operate(operator, total, currentValue) {
