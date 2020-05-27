@@ -1,6 +1,11 @@
 const server = require('express');
 const app = server();
 
+
+app.get('/*', function(req, res) {
+    res.sendFile('./build/index.html');
+});
+
 app.use(server.static('./build'));
 
 let appListener = app.listen(3500, () => console.log('App listening on port 3500')); 
