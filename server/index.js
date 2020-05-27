@@ -3,7 +3,7 @@ const app = server();
 const path = require('path');
 
 app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, '/./build', 'index.html'));
+    res.sendFile(path.join(__dirname, '/../build', 'index.html'));
 });
 
 app.use(server.static('./build'));
