@@ -1,6 +1,6 @@
 import React from 'react';
 import Colors from '../js/colors';
-import settings from '../settings.config';
+import themes from '../themes.json';
 import ReactDOM from 'react-dom';
 
 class CalcTheme extends React.Component {
@@ -11,8 +11,8 @@ class CalcTheme extends React.Component {
     
     setStyles() {
         let theme = this.props.theme;
-        let def = settings.themes.default;
-        let themeColors = theme === 'default' ? {} : settings.themes[theme];
+        let def = themes.default;
+        let themeColors = theme === 'default' ? {} : themes[theme];
         return Object.assign({}, def, themeColors);
     }
 
