@@ -45,6 +45,26 @@ body,
     }
 }
 
+.MuiDrawer-paper {
+    .MuiListSubheader-root {
+        font-size: 16px;
+        font-weight:bold;
+        svg {
+            position:absolute;
+            right:20px;
+            top:14px;
+            cursor:pointer;
+            &:hover {
+                font-size:22px;
+                top:12px;
+            }
+        }
+    }    
+
+    ul.settings-list {
+        padding:10px 50px;
+    }
+}
 .bottom {
     display: grid;
     grid-template-columns: repeat(4, 20%);
@@ -131,7 +151,6 @@ button {
     }
     .open-settings {
         top:15px;
-        left:10px;
     }
 }
 

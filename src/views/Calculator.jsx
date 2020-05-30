@@ -4,10 +4,12 @@ import CalcScreen from './Screen';
 import settings from '../settings.config';
 import Calculate from '../js/calculate';
 import Style from './Style';
+import Settings from './Settings';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.scss';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 const calculate = new Calculate(16);
+
 class Calculator extends React.Component {
     constructor(props) {
         super(props);
@@ -19,9 +21,10 @@ class Calculator extends React.Component {
             operator: null,
             tally: 0,
             resetReadout: true,
+            settingsOpen: false
         }
         this.handleClick = this.handleClick.bind(this);
-        this.screenClick = this.screenClick.bind(this);
+        this.toggleSettings = this.toggleSettings.bind(this);
     }
 
     handleClick(e) {
@@ -168,8 +171,12 @@ class Calculator extends React.Component {
         })
     }
     
-    screenClick() {
-        
+    toggleSettings() {
+        this.setState(st => {
+            return {
+                settingsOpen: !st.settingsOpen 
+            }
+        });
     }
 
     componentDidMount() {
@@ -187,7 +194,10 @@ class Calculator extends React.Component {
         return (<div className='wrapper'>
             <div className="container">
                 <div className="top">
-                    <button id="open-settings" className="open-settings"><PowerSettingsNewIcon fontSize="small"/></button>
+                    <button id="open-settings" 
+                    className="open-settings"
+                    onClick={this.toggleSettings}
+                    ><PowerSettingsNewIcon fontSize="small"/></button>
                     <CalcScreen readout={this.state.readout} screenClick={this.screenClick}/>
                 </div>
                 <div className="bottom">
@@ -195,6 +205,11 @@ class Calculator extends React.Component {
                 </div>
             </div>
             <Style theme={this.props.theme} />
+            <Settings 
+                open={this.state.settingsOpen}
+                theme={this.state.theme}
+                toggle={this.toggleSettings}
+            />
         </div>)
     }
 }

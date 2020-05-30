@@ -27,6 +27,12 @@ class CalcTheme extends React.Component {
             .container {
                 background-color: ${styles.bg};
             }
+            .MuiDrawer-paper .MuiSvgIcon-root {
+                color: ${styles.active}
+            }
+            .MuiListSubheader-root {
+                color: ${styles.active}
+            }
             .top {
                 border-bottom: 1px solid ${styles.btn};
             }
@@ -36,10 +42,15 @@ class CalcTheme extends React.Component {
             .open-settings svg {
                 color: ${styles.accent};
             }
-            .calc-screen {
-                border: 2px solid ${styles.btn};
+            .MuiDivider-root {
+                background-color: ${styles.btn}
+            }
+            .calc-screen, .MuiDrawer-paper {
                 background-color: ${accent};
                 color: ${Colors.opposite(accent)};
+            }
+            .calc-screen {
+                border: 2px solid ${styles.btn};
             }
             button.btn {
                 background-color: ${styles.btn};
