@@ -14,3 +14,26 @@ $states: "&:hover, &:active, &:visited, &:focus";
     margin:0;
     padding:0;
 }
+
+@mixin smallScreen($btnSize: 28px, $btnHeight: 65px) {
+    .bottom {
+        padding: 0 0 50px;
+        grid-row-gap: 30px;
+        button {
+            &.btn {
+                font-size: $btnSize;
+                height: $btnHeight;
+                &.calc-digit,
+                &.calc-reset {
+                    padding: 0;
+                    margin: 0;
+                }
+                &.calc-symbol {
+                    span {
+                        top: -2px;
+                    }
+                }
+            }
+        }
+    }
+}

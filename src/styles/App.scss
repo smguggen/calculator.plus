@@ -9,7 +9,7 @@ body,
     display: flex;
     justify-content: center;
     padding: 50px 30px;
-    min-width: 450px;
+    min-width: 170px;
     touch-action: manipulation;
 }
 
@@ -154,27 +154,16 @@ button {
     }
 }
 
+@media screen and (max-width: 450px) {
+    @include smallScreen(32px, 75px);
+}
+
 @media screen and (max-height: 725px) and (orientation: portrait) {
-    .bottom {
-        padding: 0 0 50px;
-        grid-row-gap: 30px;
-        button {
-            &.btn {
-                font-size: 28px;
-                height: 65px;
-                &.calc-digit,
-                &.calc-reset {
-                    padding: 0;
-                    margin: 0;
-                }
-                &.calc-symbol {
-                    span {
-                        top: -2px;
-                    }
-                }
-            }
-        }
-    }
+    @include smallScreen;
+}
+
+@media screen and (max-width: 275px) {
+    @include smallScreen(18px, 55px);
 }
 
 @media (hover: none) {
