@@ -37,3 +37,17 @@ $states: "&:hover, &:active, &:visited, &:focus";
         }
     }
 }
+
+@mixin grid($factor:20, $gap:20) {
+    .top {
+        grid-template-columns: repeat(1, calc(#{($factor*4) + '%'} + #{$gap*4}px));
+      
+        .open-settings {
+           left: #{($gap*2) + 5}px;
+        }
+    }
+    .bottom {
+        grid-template-columns: repeat(4, #{$factor + '%'});
+        grid-gap: #{$gap}px;
+    }
+}

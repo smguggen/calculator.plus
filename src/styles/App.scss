@@ -24,27 +24,6 @@ body,
     position: relative;
 }
 
-.top {
-    display: flex;
-    margin: 0 -30px 25px;
-    justify-content: center;
-}
-
-.open-settings {
-    position:absolute;
-    top:20px;
-    left:45px;;
-    border-radius:35%;
-    height:20px;
-    width:36px;
-    svg {
-        position:absolute;
-        font-size:16px;
-        top:1px;
-        left: 9px;
-    }
-}
-
 .MuiDrawer-paper {
     .MuiListSubheader-root {
         font-size: 16px;
@@ -65,11 +44,46 @@ body,
         padding:10px 50px;
     }
 }
+
+@include grid;
+
+.top {
+    display: grid;
+    margin: -31px -30px 25px;
+    padding: 0 5px;
+    justify-content: center;
+    .settings-wrapper {
+        margin: 0 30px 7px;
+        .open-settings {
+            position:relative;
+            left:0;
+            border-radius:35%;
+            height:20px;
+            width:36px;
+            svg {
+                position:absolute;
+                font-size:16px;
+                top:1px;
+                left: 9px;
+            }
+        }
+    }
+    .calc-screen {
+        text-align: right;
+        overflow: hidden;
+        height: 60px;
+        line-height: 57px;
+        padding: 0 5px;
+        margin: 10px 30px 25px;
+        resize: none;
+        font-size: 32px;
+        @include noOutline;
+    }
+
+}
+
 .bottom {
     display: grid;
-    grid-template-columns: repeat(4, 20%);
-    grid-gap: 20px;
-
     justify-content: center;
     height: 400px;
 }
@@ -81,19 +95,6 @@ body,
     .grid-col-#{$i} {
         grid-column: #{$i};
     }
-}
-
-.calc-screen {
-    text-align: right;
-    overflow: hidden;
-    padding: 0 5px;
-    height: 60px;
-    line-height: 57px;
-    margin: 10px 45px 25px;
-    width: 100%;
-    resize: none;
-    font-size: 32px;
-    @include noOutline;
 }
 
 button {
@@ -140,8 +141,9 @@ button {
         padding-top:50px;
     }
     
+    @include grid(20, 25);
+    
     .bottom {
-        grid-gap: 25px;
         grid-row-gap: 35px;
         button {
             &.btn {
@@ -149,16 +151,13 @@ button {
             }
         }
     }
-    .open-settings {
-        top:15px;
-    }
 }
 
 @media screen and (max-width: 450px) {
     @include smallScreen(32px, 75px);
 }
 
-@media screen and (max-height: 725px) and (orientation: portrait) {
+@media screen and (max-height: 745px) and (orientation: portrait) {
     @include smallScreen;
 }
 
