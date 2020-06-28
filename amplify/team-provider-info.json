@@ -1,20 +1,15 @@
 {
     "dev": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-calculator-dev-93048-authRole",
-            "UnauthRoleArn": "arn:aws:iam::666153224175:role/amplify-calculator-dev-93048-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::666153224175:role/amplify-calculator-dev-93048-authRole",
-            "Region": "us-east-1",
-            "DeploymentBucketName": "amplify-calculator-dev-93048-deployment",
-            "UnauthRoleName": "amplify-calculator-dev-93048-unauthRole",
-            "StackName": "amplify-calculator-dev-93048",
-            "StackId": "arn:aws:cloudformation:us-east-1:666153224175:stack/amplify-calculator-dev-93048/5371c0e0-a34b-11ea-ba6e-0ee829539650",
-            "AmplifyAppId": "d2177d2avf4l0l"
-        },
-        "categories": {
-            "auth": {
-                "calculator95cf39d1": {}
-            }
+            "AuthRoleName": "amplify-calculatorplus-dev-113044-authRole",
+            "UnauthRoleArn": "arn:aws:iam::655996320812:role/amplify-calculatorplus-dev-113044-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::655996320812:role/amplify-calculatorplus-dev-113044-authRole",
+            "Region": "us-east-2",
+            "DeploymentBucketName": "amplify-calculatorplus-dev-113044-deployment",
+            "UnauthRoleName": "amplify-calculatorplus-dev-113044-unauthRole",
+            "StackName": "amplify-calculatorplus-dev-113044",
+            "StackId": "arn:aws:cloudformation:us-east-2:655996320812:stack/amplify-calculatorplus-dev-113044/b885aec0-b95c-11ea-8678-0aeddbb89fe2",
+            "AmplifyAppId": "d1mr22m8hl4s3y"
         }
     }
 }
