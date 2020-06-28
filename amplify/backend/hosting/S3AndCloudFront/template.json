@@ -3,10 +3,12 @@
     "Description": "Hosting resource stack creation using Amplify CLI",
     "Parameters": {
         "env": {
-            "Type": "String"
+            "Type": "String",
+            "Default": "dev"
         },
         "bucketName": {
-            "Type": "String"
+            "Type": "String",
+            "Default": "srcer"
         }
     },
     "Conditions": {
