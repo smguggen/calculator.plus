@@ -194,10 +194,10 @@ class Calculator extends React.Component {
         return (<div className='wrapper'>
             <div className="container">
                 <div className="top">
-                    <button id="open-settings" 
+                    <div className="settings-wrapper"><button id="open-settings" 
                     className="open-settings"
                     onClick={this.toggleSettings}
-                    ><PowerSettingsNewIcon fontSize="small"/></button>
+                    ><PowerSettingsNewIcon fontSize="small"/></button></div>
                     <CalcScreen readout={this.state.readout} screenClick={this.screenClick}/>
                 </div>
                 <div className="bottom">
