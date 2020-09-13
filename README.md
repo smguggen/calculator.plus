@@ -1,5 +1,18 @@
 # Calculator.plus
 
+## Amplify
+
+- ### Install CLI
+```bash
+npm install -g @aws-amplify/cli
+```
+
+- ### Initialize app
+```bash
+amplify init
+```
+- ### 
+
 ## Demo
 [calculator.plus](https://calculator.plus)
 

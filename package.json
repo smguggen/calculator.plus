@@ -1,6 +1,6 @@
 {
-  "name": "calculator.plus",
-  "description": "It's a calculator. Plus...",
+  "name": "aws-amplify-react-router",
+  "description": "Basic single-page calculator app using create-react-app with a theming system powered by React Router and using Amplify to quickly deploy to the web",
   "version": "0.1.0",
   "private": false,
   "license": "MIT",

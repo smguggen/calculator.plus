@@ -1,9 +1,12 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App from './App';
+import App from './views/Router';
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const displayScreen = getByText(/0\./i);
-  expect(displayScreen).toBeInTheDocument();
+describe('App', () => {
+  const app = render(<App />);
+  const displayScreen = app.getByText(/0\./i);
+  test('renders calculator screen', () => {
+      expect(displayScreen).toBeInTheDocument();
+    });
 });
+// TODO - build out tests
