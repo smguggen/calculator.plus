@@ -1,4 +1,3 @@
-
 class Colors {
     static lighten(col,perc) {
         let colors = new Colors();

@@ -6,7 +6,7 @@ export default class CalcScreen extends React.Component {
           <textarea id="screen" 
             value={ this.props.readout } 
             className="calc-screen" 
-            onClick={this.props.screenClick}
+            onClick={this.props.screenClick || (() => {})}
             maxLength="20" 
             readOnly
         />)

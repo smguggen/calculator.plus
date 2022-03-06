@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import CalcButton from './Button';
 import CalcScreen from './Screen';
 import settings from '../settings.config';
@@ -7,211 +7,161 @@ import Style from './Style';
 import Settings from './Settings';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/App.scss';
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import { useParams } from 'react-router-dom';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 const calculate = new Calculate(16);
+const squareRootSymbol = settings.dictionary.Radic;
 
-class Calculator extends React.Component {
-    constructor(props) {
-        super(props);
-        this.alts = [settings.dictionary.Radic];    
-            
-        this.state = {
-            lastPressed: null,
-            readout: '0.',
-            operator: null,
-            tally: 0,
-            resetReadout: true,
-            settingsOpen: false
-        }
-        this.handleClick = this.handleClick.bind(this);
-        this.toggleSettings = this.toggleSettings.bind(this);
-    }
+const Calculator = (props) => {
+    const [lastPressed, setLastPressed] = useState(null);
+    const [readout, setReadout] = useState('0.');
+    const [operator, setOperator] = useState(null);
+    const [tally, setTally] = useState(0);
+    const [resetReadout, setResetReadout] = useState(true);
+    const [settingsOpen, setSettingsOpen] = useState(false);
+    const [btns, setBtns] = useState([]);
 
-    handleClick(e) {
-        this.triggerClick(e.target.textContent);
-    }
+    const params = useParams() || {};
 
-    handlePress(e) {
-        let digit = settings.keyMap[e.key] ? settings.keyMap[e.key] : e.key;
-        this.pressed = digit;
-        if (settings.order.includes(digit)) {
-            this.triggerClick(digit);
-        }
-    }
-
-    triggerClick(digit) {
-        if (settings.operators.includes(digit)) {
-            this.handleOperators(digit);
-        } else if (settings.resolvers.includes(digit)) {
-            this.handleResolvers(digit);
-        } else if (settings.resetters.includes(digit)) {
-            this.handleResetters(digit);
-        } else if (digit === '.') {
-            this.handleDecimal();
-        } else {
-            this.handleDigits(digit);
-        }
-    }
-
-    set pressed(p) {
-        this._pressed = !p ? [] : this._pressed || [];
-        if (this._pressed.length >= 25) {
-            this._pressed.pop();
-        }
-        this._pressed.unshift(p);
-    }
-
-    get pressed() {
-        return this._pressed.filter(press => !['Shift', 'Tab', 'Control', 'Alt', 'Meta'].includes(press));
-    }
-
-    reset(partial, last) {
+    const reset = useCallback((partial, last) => {
         last = last || null;
-        this.setState(({ lastPressed }) => {
-            let st = {
-                readout: '0.',
-                operator: null,
-                resetReadout: true
-            }
-            if (!partial && lastPressed !== 'C') {
-                st.tally = 0;
-            }
-            return st;
-        }, () => { this.setState({ lastPressed: last }) });
-    }
+        setReadout('0.');
+        setOperator(null);
+        setResetReadout(true);
+        if (!partial && lastPressed !== 'C') {
+            setTally(0);
+        }
+        setLastPressed(last);
+    }, []);
 
-    handleDigits(digit) {
-        this.setState(function (state) {
-            let readout = calculate.getReadout(state.readout);
-            let tally = state.tally;
-            if (state.resetReadout) {
-                if (state.operator) {
-                    tally = tally ? calculate.operate(state.operator, tally, readout) : readout;
-                } else {
-                    tally = readout;
-                }
-                readout = digit.toString();
-                if (state.lastPressed === '.') {
-                    readout = '.' + readout;
-                }
-            } else {
-                readout = readout.toString() + 
-                    (state.lastPressed === '.' ? '.' : '') +
-                    digit.toString();
-            }
-      
-            let res = calculate.setReadout(readout);
-            return {
-                lastPressed: digit,
-                resetReadout: false,
-                readout: res,
-                tally: tally
-            }
-        });
-    }
+    const equate = useCallback((op = operator, lp, newOp, displayCallback) => {
+        if (tally || settings.resolvers.includes(lp)) {
+            let currentValue = calculate.getReadout(readout);
+            let tl = calculate.operate(op, tally, currentValue);
+            if (typeof displayCallback === 'function') tl = displayCallback(tl);
+            setReadout(calculate.setReadout(tl));
+            setTally(0);
+        }
+        setLastPressed(lp);
+        setResetReadout(true);
+        setOperator(newOp);
+    }, []);
 
-    handleDecimal() {
-        this.setState(function (state) {
-            let currentValue = calculate.getReadout(state.readout);
-            let val = currentValue === parseInt(currentValue) ? '.' : state.lastPressed;
-            return {
-                lastPressed: val,
-                resetReadout: false
-            }
-        });
-    }
+    const handleDigits = useCallback(digit => {
+        let ro = calculate.getReadout(readout);
+        let tl = tally;
+        if (resetReadout) {
+            if (operator) tl = tl ? calculate.operate(operator, tl, ro) : ro;
+            else tl = ro;
+            ro = digit.toString();
+            if (lastPressed === '.') ro = '.' + ro;
+            setResetReadout(false);
+        } else {
+            ro = ro.toString() + (lastPressed === '.' ? '.' : '') + digit.toString();
+        }
+        setReadout(calculate.setReadout(ro));
+        setLastPressed(digit);
+        setTally(tl);
+    },[])
 
-    handleResetters(digit) {
+    const handleDecimal = useCallback(() => {
+        let currentValue = calculate.getReadout(readout);
+        if (currentValue === parseInt(currentValue)) setLastPressed('.');
+        setResetReadout(false);
+    }, [readout])
+
+    const handleResetters = useCallback(digit => {
         let partial = digit === 'C';
-        this.reset(partial, digit);
-    }
+        reset(partial, digit);
+    }, [reset]);
 
-    handleOperators(digit) {
-        this.equate(digit, digit, digit);
-    }
+    const handleOperators = useCallback(digit => {
+        equate(digit, digit, digit);
+    }, [equate]);
 
-    handleResolvers(digit) {
-        this.equate(null, digit, null, function (tally) {
+    const handleResolvers = useCallback(digit => {
+        equate(null, digit, null, tl => {
             let res;
             switch (digit) {
-                case this.squareRoot: res = Math.sqrt(tally);
+                case squareRootSymbol: res = Math.sqrt(tl);
                     break;
-                case '%': res = tally / 100;
+                case '%': res = tl / 100;
                     break;
-                case '+/-': res = tally * -1;
+                case '+/-': res = tl * -1;
                     break;
-                default: res = tally;
+                default: res = tl;
                     break;
             }
             return res;
         });
-    }
-    
-    equate(operator, lastPressed, newOperator, displayCallback) {
-        this.setState(function (state) {
-            let res = {
-                lastPressed: lastPressed,
-                resetReadout: true,
-                tally: state.tally,
-                readout: state.readout,
-                operator: newOperator
-            }
-            if (!state.tally && !settings.resolvers.includes(lastPressed)) {
-                return res;
-            }
-            let currentValue = calculate.getReadout(state.readout);
-            operator = operator || state.operator;
-            let tally = calculate.operate(operator, state.tally, currentValue);
-            if (typeof displayCallback === 'function') {
-                tally = displayCallback.call(this, tally);
-            }
-            res.readout = calculate.setReadout(tally);
-            res.tally = 0;
-            return res;
-        })
-    }
-    
-    toggleSettings() {
-        this.setState(st => {
-            return {
-                settingsOpen: !st.settingsOpen 
-            }
-        });
-    }
+    }, [equate]);
 
-    componentDidMount() {
-        document.getElementById('screen').focus();
-        let $this = this;
-        document.addEventListener('keyup', e => {
-            $this.handlePress(e);
-        });
-    }
+    const triggerClick = useCallback((digit) => {
+        console.log('TALLY', tally);
+        if (settings.operators.includes(digit)) {
+            console.log('OPERATOR');
+            handleOperators(digit);
+        } else if (settings.resolvers.includes(digit)) {
+            console.log('RESOLVER');
+            handleResolvers(digit);
+        } else if (settings.resetters.includes(digit)) {
+            console.log('RESETTER');
+            handleResetters(digit);
+        } else if (digit === '.') {
+            console.log('DECIMAL');
+            handleDecimal();
+        } else {
+            console.log('NUMBER');
+            handleDigits(digit);
+        }
+    }, []);
+
+    const handleClick = useCallback((e) => {
+        triggerClick(e.target.textContent);
+    }, [triggerClick])
+
+    const handlePress = useCallback((e) => {
+        let digit = settings.keyMap[e.key] ? settings.keyMap[e.key] : e.key;
+        if (settings.order.includes(digit)) {
+            triggerClick(digit);
+        }
+    }, [triggerClick]);
     
-    render() {
-        let btns = (settings.order.map((digit, index) => {
-            return <CalcButton display={digit} clickHandler={this.handleClick} key={index} active={this.state.operator} index={index} />
-        }));
-        return (<div className='wrapper'>
-            <div className="container">
-                <div className="top">
-                    <div className="settings-wrapper"><button id="open-settings" 
-                    className="open-settings"
-                    onClick={this.toggleSettings}
-                    ><PowerSettingsNewIcon fontSize="small"/></button></div>
-                    <CalcScreen readout={this.state.readout} screenClick={this.screenClick}/>
-                </div>
-                <div className="bottom">
-                    {btns}
-                </div>
+    const toggleSettings = useCallback(() => {
+        setSettingsOpen(s => !s);
+    }, []);
+
+    useEffect(() => {
+        document.getElementById('screen').focus();
+        document.addEventListener('keyup', e => {
+            handlePress(e);
+        });
+    }, [handlePress]);
+
+    useEffect(() => {
+        setBtns(settings.order.map((digit, index) => (<CalcButton display={digit} clickHandler={handleClick} key={index} active={operator} index={index} />)))
+    }, [handleClick, operator]);
+
+    return (<div className='wrapper'>
+        <div className="container">
+            <div className="top">
+                <div className="settings-wrapper"><button id="open-settings" 
+                className="open-settings"
+                onClick={toggleSettings}
+                ><PowerSettingsNewIcon fontSize="small"/></button></div>
+                <CalcScreen readout={readout} screenClick={props.screenClick}/>
             </div>
-            <Style theme={this.props.theme} />
-            <Settings 
-                open={this.state.settingsOpen}
-                theme={this.state.theme}
-                toggle={this.toggleSettings}
-            />
-        </div>)
-    }
+            <div className="bottom">
+                {btns}
+            </div>
+        </div>
+        <Style theme={params.theme} />
+        <Settings 
+            open={settingsOpen}
+            theme={params.theme}
+            toggle={toggleSettings}
+        />
+    </div>)
 }
 
 export default Calculator;

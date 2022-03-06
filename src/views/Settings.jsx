@@ -6,8 +6,8 @@ import {
     List,
     ListSubheader, 
     Divider, 
-} from '@material-ui/core';
-import { ChevronLeft } from '@material-ui/icons';
+} from '@mui/material';
+import { ChevronLeft } from '@mui/icons-material';
 export default class CalcSettings extends React.Component {
     
     getThemes() { 

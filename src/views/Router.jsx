@@ -1,15 +1,13 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Calculator from './Calculator';
-class Router extends React.Component {
-   
-    render() {
-        return (<BrowserRouter>
-            <Switch>
-                <Route path="/:theme?" render={({match}) => <Calculator theme={match.params.theme || 'default'} />} />
-            </Switch>
-        </BrowserRouter>);
-    }
+const Router = () => {
+    return (<BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Calculator />} />
+            <Route path=":theme" element={<Calculator />} />
+        </Routes>
+    </BrowserRouter>);
 }
 
 export default Router;
